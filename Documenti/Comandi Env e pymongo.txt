@@ -1,0 +1,9 @@
+Comandi Env e pymongo
+Primo passaggio 
+Python -m venv .env
+Scondo passaggio
+.env\Scripts\activate.bat
+Terzo passaggio
+pip install pymongo
+Quarto passaggio
+pip install Faker
