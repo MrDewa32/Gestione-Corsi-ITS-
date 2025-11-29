@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "mod-101",
+    "nome": "Sistemi Operativi",
+    "codice": "SO101",
+    "ore": 60,
+    "descrizione": "Modulo sui sistemi operativi moderni.",
+    "studentiIscritti": [
+      { "studenteId": "stu-001", "nome": "Marco Fontana" },
+      { "studenteId": "stu-002", "nome": "Giulia Greco" },
+      { "studenteId": "stu-003", "nome": "Sara Villa" }
+    ]
+  },
+  {
+    "_id": "mod-102",
+    "nome": "Reti e Sicurezza",
+    "codice": "RE102",
+    "ore": 50,
+    "descrizione": "Fondamenti di reti e sicurezza informatica.",
+    "studentiIscritti": [
+      { "studenteId": "stu-002", "nome": "Giulia Greco" },
+      { "studenteId": "stu-004", "nome": "Andrea Moretti" },
+      { "studenteId": "stu-005", "nome": "Luca Rossi" }
+    ]
+  },
+  {
+    "_id": "mod-103",
+    "nome": "Database",
+    "codice": "DB103",
+    "ore": 40,
+    "descrizione": "Teoria e pratica dei database.",
+    "studentiIscritti": [
+      { "studenteId": "stu-001", "nome": "Marco Fontana" },
+      { "studenteId": "stu-006", "nome": "Elisa Sala" },
+      { "studenteId": "stu-007", "nome": "Giorgio Neri" }
+    ]
+  },
+  {
+    "_id": "mod-104",
+    "nome": "Sviluppo Web",
+    "codice": "SW104",
+    "ore": 70,
+    "descrizione": "Front-end e back-end development.",
+    "studentiIscritti": [
+      { "studenteId": "stu-004", "nome": "Andrea Moretti" },
+      { "studenteId": "stu-008", "nome": "Valeria Luce" },
+      { "studenteId": "stu-009", "nome": "Alessandro Bini" }
+    ]
+  },
+  {
+    "_id": "mod-105",
+    "nome": "Cloud Computing",
+    "codice": "CL105",
+    "ore": 45,
+    "descrizione": "Introduzione al Cloud e DevOps.",
+    "studentiIscritti": [
+      { "studenteId": "stu-003", "nome": "Sara Villa" },
+      { "studenteId": "stu-005", "nome": "Luca Rossi" },
+      { "studenteId": "stu-010", "nome": "Francesco Sanna" }
+    ]
+  }
+]
