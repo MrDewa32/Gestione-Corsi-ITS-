@@ -4,8 +4,41 @@ mat-toolbar {
   left: 0;
   right: 0;
   z-index: 1000;
+  background-color: #004F4F;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
 }
 
 .spacer {
-  flex: 1 3 auto;
+  flex: 1 1 auto;
+}
+
+#ITS {
+  color: #00DEDE;
+  margin: 0;
+}
+
+#home {
+  color: #00DEDE;
+}
+
+#corsi {
+  color: #00DEDE;
+}
+
+#studenti {
+  color: #00DEDE;
+}
+
+#esami {
+  color: #00DEDE;
+}
+
+#account {
+  color: #00DEDE;
+}
+
+.navbar-span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

@@ -1,0 +1,42 @@
+mat-card {
+    width: 300px;
+    margin: 20px;
+    justify-content: center;
+}
+
+img {
+    width: 100%;
+    border-radius: 9px;
+}
+
+mat-card-title {
+    text-align: center;
+}
+
+mat-card-content {
+    padding: 16px;
+}
+
+mat-card-actions {
+    justify-content: center;
+}
+
+mat-card-actions #partecipa {
+    margin: 0 8px;
+}
+
+mat-card-actions #controlla {
+    margin: 0 8px;
+}
+
+p {
+    margin: 4px 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+span #descrizione {
+    margin: 16px 0;
+    text-align: center;
+    font-size: 16px;
+}
