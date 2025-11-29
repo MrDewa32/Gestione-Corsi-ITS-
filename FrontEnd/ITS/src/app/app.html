@@ -1,12 +1,6 @@
 <app-navbar/>
-    <div class="container" id="container">
-        <app-card 
-            *ngFor="let dato of dati"
-            [titolo]="dato.titolo"
-            [descrizione]="dato.descrizione"
-            [badge]="dato.badge"
-        />
-        
+    <div>
+        <router-outlet></router-outlet>
     </div>
 
 <app-footer/>

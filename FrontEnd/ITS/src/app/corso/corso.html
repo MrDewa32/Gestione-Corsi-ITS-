@@ -1,0 +1,8 @@
+<div class="card-container">
+    <app-card 
+        *ngFor="let dato of dati"
+        [titolo]="dato.titolo"
+        [descrizione]="dato.descrizione"
+        [badge]="dato.badge"
+    />
+</div>

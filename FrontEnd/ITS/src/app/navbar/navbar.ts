@@ -7,9 +7,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule } from '@angular/material/menu';
 
 
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatMenuModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatMenuModule, RouterModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
