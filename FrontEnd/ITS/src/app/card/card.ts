@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-  selector: 'app-prova',
+  selector: 'app-card',
   imports: [
     MatSlideToggleModule,
     MatSliderModule,
@@ -16,9 +16,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatTooltipModule,
     MatBadgeModule
   ],
-  templateUrl: './prova.html',
-  styleUrl: './prova.css',
+  templateUrl: './card.html',
+  styleUrl: './card.css',
 })
-export class Prova {
+export class Card {
 
 }
