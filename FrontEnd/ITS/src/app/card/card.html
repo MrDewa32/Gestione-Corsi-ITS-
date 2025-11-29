@@ -1,9 +1,9 @@
 <mat-card id="card">
     <mat-card-header>
-        <mat-card-title matBadge="4" matBadgeOverlap="false" matBadgeSize="small">Titolo corso</mat-card-title>
+        <mat-card-title [matBadge]="badge()" [matBadgeHidden]="(badge() || 0) < 1" matBadgeOverlap="false" matBadgeSize="large">{{ titolo() }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <span id="descrizione">descrizione corso</span>
+        <span id="descrizione">{{ descrizione() }}</span>
     </mat-card-content>
     <mat-card-actions>
         <button id="partecipa" mat-raised-button matTooltip="Partecipa al corso">Partecipa</button>

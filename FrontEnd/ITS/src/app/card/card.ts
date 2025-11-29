@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -20,5 +20,7 @@ import { MatBadgeModule } from '@angular/material/badge';
   styleUrl: './card.css',
 })
 export class Card {
-
+  titolo = input<string>('');
+  descrizione = input<string>('');
+  badge = input<number>();
 }
