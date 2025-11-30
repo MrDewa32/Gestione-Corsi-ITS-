@@ -17,7 +17,9 @@ class ModuloSnapshot(EmbeddedDocument):
 
 
 class StudenteSubset(EmbeddedDocument):
-    studente_id = ObjectIdField(required=False)
+    studente_id = ObjectIdField(
+        required=False
+    )  # Può essere None se lo studente non esiste più nel DB, ma vogliamo mantenere il riferimento. Prima era TRUE ma in fase di test ho deciso di cambiarlo non renderlo obbligatorio
     nome = StringField(required=True)
 
 
