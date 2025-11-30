@@ -1,0 +1,20 @@
+#card {
+ width: 257px;
+ border-radius: 15px;
+ margin-bottom: 30px;
+ max-width: 400px;
+ border: 2px solid #1D71B8 !important;
+}
+
+#card-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    font-family: "Abril Fatface";
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
