@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -9,5 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './cardoutline.css',
 })
 export class Cardoutline {
-
+  titolo = input<string>('');
+  descrizione = input<string>('');
 }

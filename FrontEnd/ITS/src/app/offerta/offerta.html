@@ -5,10 +5,10 @@
         <p id="sottoTitolo">Un ampia scelta di corsi per specializzarsi nelle professioni più richieste nell'attuale mercato del lavoro</p>
 
         <div class="cards-grid">
-            <app-cardoutline></app-cardoutline>
-            <app-cardoutline></app-cardoutline>
-            <app-cardoutline></app-cardoutline>
-            <app-cardoutline></app-cardoutline>
+            <app-cardoutline *ngFor="let corso of corsi"
+            [titolo]="corso.titolo"
+            [descrizione]="corso.descrizione"
+            ></app-cardoutline>
         </div>
     </div>
         
