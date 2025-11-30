@@ -1,32 +1,26 @@
 <mat-toolbar>
 
-  <a href="https://www.apuliadigital.it" id="ITSimage">
   <span class="navbar-span">
-        <img src="itslogo.png" alt="ITS Logo" width="100" height="100">
+    <a href="https://www.apuliadigital.it" id="ITSimage">
+      <img src="itslogo.png" alt="ITS Logo" width="100" height="100">
+    </a>
   </span>
-  </a>
+  
+  <form class="navbar-span" id="search">
+    <input type="text" placeholder="Cerca">
+    <button mat-icon-button type="search"><mat-icon>search</mat-icon></button>
+  </form>
 
   <span class="spacer"></span>
 
   <span class="navbar-span">
 
-    <button id="home" routerLink="/" mat-stroked-button><mat-icon>home</mat-icon>Home</button>
-    <button id="corsi" routerLink="/corsi" mat-stroked-button><mat-icon>book</mat-icon>Corsi</button>
-    <button id="studenti" mat-stroked-button><mat-icon>group</mat-icon>Studenti</button>
-    <button id="esami" mat-stroked-button><mat-icon>quiz</mat-icon>Esami</button>
-
-    
-    <button id="account" mat-stroked-button [matMenuTriggerFor]="menu">
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>Profilo</button>
-            <button mat-menu-item>Impostazioni</button>
-            <button mat-menu-item>Esci</button>
-        </mat-menu>
-      <mat-icon>account_circle</mat-icon>
-      <span>Account</span>
-      <mat-icon>arrow_drop_down</mat-icon>
-
-    </button>
+    <button id="home" routerLink="/" mat-stroked-button><mat-icon>login</mat-icon>Accedi</button>
+    <button id="corsi" routerLink="/corsi" mat-stroked-button><mat-icon>book</mat-icon>Registrati</button>
+    <button id="studenti" mat-stroked-button><mat-icon>home</mat-icon>Scopri l'ITS</button>
+    <button id="corsi" mat-stroked-button><mat-icon>book</mat-icon>Corsi</button>
+    <button id="corsi" mat-stroked-button><mat-icon>phone</mat-icon>Contatti</button>
+    <button id="sandwich" mat-icon-button><mat-icon>menu</mat-icon></button>
 
   </span>
 </mat-toolbar>

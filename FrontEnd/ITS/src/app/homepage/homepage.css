@@ -1,0 +1,32 @@
+.content-columns {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 100px auto 0;
+}
+
+.column-left {
+  flex: 1;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.column-right {
+  flex: 1;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .content-columns {
+    flex-direction: column;
+  }
+}
+#column-right {
+  font-size: 16px;
+  color: black;
+}
