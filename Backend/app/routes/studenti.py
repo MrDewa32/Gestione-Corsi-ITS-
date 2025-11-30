@@ -4,14 +4,19 @@ from app.models import Studente, EsameEmbedded, ModuloSnapshot
 studenti_bp = Blueprint("studenti", __name__)
 
 
-@studenti_bp.route("/studenti", methods=["GET"])
+@studenti_bp.route("/", methods=["GET"])
 def get_studenti():
     studenti = Studente.objects()
-    return jsonify([s.to_mongo().to_dict() for s in studenti])
+    result = []
+    for s in studenti:
+        data = s.to_mongo().to_dict()
+        data["_id"] = str(data["_id"])
+        result.append(data)
+    return jsonify(result)
 
 
 # Crea uno studente, gestendo anche esami embedded e modulo snapshot
-@studenti_bp.route("/studenti", methods=["POST"])
+@studenti_bp.route("/", methods=["POST"])
 def create_studente():
     data = request.json
     esami_data = data.pop("esami", [])
@@ -24,19 +29,23 @@ def create_studente():
         esami.append(EsameEmbedded(**esame))
     studente = Studente(**data, esami=esami)
     studente.save()
-    return jsonify(studente.to_mongo().to_dict()), 201
+    result = studente.to_mongo().to_dict()
+    result["_id"] = str(result["_id"])
+    return jsonify(result), 201
 
 
-@studenti_bp.route("/studenti/<string:studente_id>", methods=["GET"])
+@studenti_bp.route("/<string:studente_id>", methods=["GET"])
 def get_studente(studente_id):
     studente = Studente.objects(id=studente_id).first()
     if not studente:
         return jsonify({"error": "Studente non trovato"}), 404
-    return jsonify(studente.to_mongo().to_dict())
+    result = studente.to_mongo().to_dict()
+    result["_id"] = str(result["_id"])
+    return jsonify(result)
 
 
 # Aggiorna uno studente, gestendo anche esami embedded e modulo snapshot
-@studenti_bp.route("/studenti/<string:studente_id>", methods=["PUT"])
+@studenti_bp.route("/<string:studente_id>", methods=["PUT"])
 def update_studente(studente_id):
     data = request.json
     studente = Studente.objects(id=studente_id).first()
@@ -54,10 +63,12 @@ def update_studente(studente_id):
         data["esami"] = esami
     studente.update(**data)
     studente.reload()
-    return jsonify(studente.to_mongo().to_dict())
+    result = studente.to_mongo().to_dict()
+    result["_id"] = str(result["_id"])
+    return jsonify(result)
 
 
-@studenti_bp.route("/studenti/<string:studente_id>", methods=["DELETE"])
+@studenti_bp.route("/<string:studente_id>", methods=["DELETE"])
 def delete_studente(studente_id):
     studente = Studente.objects(id=studente_id).first()
     if not studente:

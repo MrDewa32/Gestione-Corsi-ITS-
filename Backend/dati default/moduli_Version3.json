@@ -1,0 +1,57 @@
+[
+  {
+    "codice": "SO101",
+    "nome": "Sistemi Operativi",
+    "ore": 60,
+    "descrizione": "Modulo sui sistemi operativi moderni.",
+    "studentiIscritti": [
+      { "nome": "Marco Fontana" },
+      { "nome": "Giulia Greco" },
+      { "nome": "Sara Villa" }
+    ]
+  },
+  {
+    "codice": "RE102",
+    "nome": "Reti e Sicurezza",
+    "ore": 50,
+    "descrizione": "Fondamenti di reti e sicurezza informatica.",
+    "studentiIscritti": [
+      { "nome": "Giulia Greco" },
+      { "nome": "Andrea Moretti" },
+      { "nome": "Luca Rossi" }
+    ]
+  },
+  {
+    "codice": "DB103",
+    "nome": "Database",
+    "ore": 40,
+    "descrizione": "Teoria e pratica dei database.",
+    "studentiIscritti": [
+      { "nome": "Marco Fontana" },
+      { "nome": "Elisa Sala" },
+      { "nome": "Giorgio Neri" }
+    ]
+  },
+  {
+    "codice": "SW104",
+    "nome": "Sviluppo Web",
+    "ore": 70,
+    "descrizione": "Front-end e back-end development.",
+    "studentiIscritti": [
+      { "nome": "Andrea Moretti" },
+      { "nome": "Valeria Luce" },
+      { "nome": "Alessandro Bini" }
+    ]
+  },
+  {
+    "codice": "CL105",
+    "nome": "Cloud Computing",
+    "ore": 45,
+    "descrizione": "Introduzione al Cloud e DevOps.",
+    "studentiIscritti": [
+      { "nome": "Sara Villa" },
+      { "nome": "Luca Rossi" },
+      { "nome": "Francesco Sanna" }
+    ]
+  }
+]

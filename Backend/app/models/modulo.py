@@ -17,7 +17,7 @@ class ModuloSnapshot(EmbeddedDocument):
 
 
 class StudenteSubset(EmbeddedDocument):
-    studente_id = ObjectIdField(required=True)
+    studente_id = ObjectIdField(required=False)
     nome = StringField(required=True)
 
 

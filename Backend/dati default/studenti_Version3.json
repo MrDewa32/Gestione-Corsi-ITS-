@@ -1,17 +1,16 @@
 [
   {
-    "_id": "stu-001",
     "nome": "Marco",
     "cognome": "Fontana",
     "email": "marco.fontana@email.com",
-    "moduliIscritti": ["mod-101", "mod-103"],
+    "moduliIscritti": ["SO101", "DB103"],
     "esami": [
       {
         "data": "2025-09-10",
         "voto": 27,
         "note": "Buona prova",
         "modulo": {
-          "moduloId": "mod-101",
+          "codice": "SO101",
           "nome": "Sistemi Operativi",
           "ore": 60,
           "descrizione": "Modulo sui sistemi operativi moderni."
@@ -22,7 +21,7 @@
         "voto": 30,
         "note": "Eccellente",
         "modulo": {
-          "moduloId": "mod-103",
+          "codice": "DB103",
           "nome": "Database",
           "ore": 40,
           "descrizione": "Teoria e pratica dei database."
@@ -31,18 +30,17 @@
     ]
   },
   {
-    "_id": "stu-002",
     "nome": "Giulia",
     "cognome": "Greco",
     "email": "giulia.greco@email.com",
-    "moduliIscritti": ["mod-101", "mod-102"],
+    "moduliIscritti": ["SO101", "RE102"],
     "esami": [
       {
         "data": "2025-09-10",
         "voto": 25,
         "note": "Sufficiente",
         "modulo": {
-          "moduloId": "mod-101",
+          "codice": "SO101",
           "nome": "Sistemi Operativi",
           "ore": 60,
           "descrizione": "Modulo sui sistemi operativi moderni."
@@ -51,18 +49,17 @@
     ]
   },
   {
-    "_id": "stu-003",
     "nome": "Sara",
     "cognome": "Villa",
     "email": "sara.villa@email.com",
-    "moduliIscritti": ["mod-101", "mod-105"],
+    "moduliIscritti": ["SO101", "CL105"],
     "esami": [
       {
         "data": "2025-09-10",
         "voto": 29,
         "note": "Molto bene",
         "modulo": {
-          "moduloId": "mod-101",
+          "codice": "SO101",
           "nome": "Sistemi Operativi",
           "ore": 60,
           "descrizione": "Modulo sui sistemi operativi moderni."
@@ -73,7 +70,7 @@
         "voto": 28,
         "note": "Ottima comprensione",
         "modulo": {
-          "moduloId": "mod-105",
+          "codice": "CL105",
           "nome": "Cloud Computing",
           "ore": 45,
           "descrizione": "Introduzione al Cloud e DevOps."
@@ -82,18 +79,17 @@
     ]
   },
   {
-    "_id": "stu-004",
     "nome": "Andrea",
     "cognome": "Moretti",
     "email": "andrea.moretti@email.com",
-    "moduliIscritti": ["mod-102", "mod-104"],
+    "moduliIscritti": ["RE102", "SW104"],
     "esami": [
       {
         "data": "2025-10-03",
         "voto": 23,
         "note": "Da migliorare",
         "modulo": {
-          "moduloId": "mod-102",
+          "codice": "RE102",
           "nome": "Reti e Sicurezza",
           "ore": 50,
           "descrizione": "Fondamenti di reti e sicurezza informatica."
@@ -102,18 +98,17 @@
     ]
   },
   {
-    "_id": "stu-005",
     "nome": "Luca",
     "cognome": "Rossi",
     "email": "luca.rossi@email.com",
-    "moduliIscritti": ["mod-102", "mod-105"],
+    "moduliIscritti": ["RE102", "CL105"],
     "esami": [
       {
         "data": "2025-10-10",
         "voto": 24,
         "note": "",
         "modulo": {
-          "moduloId": "mod-102",
+          "codice": "RE102",
           "nome": "Reti e Sicurezza",
           "ore": 50,
           "descrizione": "Fondamenti di reti e sicurezza informatica."
@@ -122,18 +117,17 @@
     ]
   },
   {
-    "_id": "stu-006",
     "nome": "Elisa",
     "cognome": "Sala",
     "email": "elisa.sala@email.com",
-    "moduliIscritti": ["mod-103"],
+    "moduliIscritti": ["DB103"],
     "esami": [
       {
         "data": "2025-09-29",
         "voto": 25,
         "note": "",
         "modulo": {
-          "moduloId": "mod-103",
+          "codice": "DB103",
           "nome": "Database",
           "ore": 40,
           "descrizione": "Teoria e pratica dei database."
@@ -142,26 +136,24 @@
     ]
   },
   {
-    "_id": "stu-007",
     "nome": "Giorgio",
     "cognome": "Neri",
     "email": "giorgio.neri@email.com",
-    "moduliIscritti": ["mod-103"],
+    "moduliIscritti": ["DB103"],
     "esami": []
   },
   {
-    "_id": "stu-008",
     "nome": "Valeria",
     "cognome": "Luce",
     "email": "valeria.luce@email.com",
-    "moduliIscritti": ["mod-104"],
+    "moduliIscritti": ["SW104"],
     "esami": [
       {
         "data": "2025-11-12",
         "voto": 28,
         "note": "Ottima pratica",
         "modulo": {
-          "moduloId": "mod-104",
+          "codice": "SW104",
           "nome": "Sviluppo Web",
           "ore": 70,
           "descrizione": "Front-end e back-end development."
@@ -170,26 +162,24 @@
     ]
   },
   {
-    "_id": "stu-009",
     "nome": "Alessandro",
     "cognome": "Bini",
     "email": "alessandro.bini@email.com",
-    "moduliIscritti": ["mod-104"],
+    "moduliIscritti": ["SW104"],
     "esami": []
   },
   {
-    "_id": "stu-010",
     "nome": "Francesco",
     "cognome": "Sanna",
     "email": "francesco.sanna@email.com",
-    "moduliIscritti": ["mod-105"],
+    "moduliIscritti": ["CL105"],
     "esami": [
       {
         "data": "2025-11-22",
         "voto": 26,
         "note": "Buona conoscenza",
         "modulo": {
-          "moduloId": "mod-105",
+          "codice": "CL105",
           "nome": "Cloud Computing",
           "ore": 45,
           "descrizione": "Introduzione al Cloud e DevOps."
