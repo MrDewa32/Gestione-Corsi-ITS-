@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from app.models import Modulo, StudenteSubset
 
 modulo_bp = Blueprint("modulo", __name__)
-   
+
 @modulo_bp.route("/", methods=["GET"])
 def get_moduli():
     moduli = Modulo.objects()
