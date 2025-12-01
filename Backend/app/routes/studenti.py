@@ -1,77 +1,83 @@
-from flask import Blueprint, request, jsonify
-from app.models import Studente, EsameEmbedded, ModuloSnapshot
+from flask import Blueprint, request, jsonify, current_app
+from bson import ObjectId
 
 studenti_bp = Blueprint("studenti", __name__)
 
 
 @studenti_bp.route("/", methods=["GET"])
 def get_studenti():
-    studenti = Studente.objects()
-    result = []
+    """Lista tutti gli studenti"""
+    db = current_app.config["MONGO_DB"]
+    studenti = list(db.studente.find())  # Usa 'studente' non 'studenti'
     for s in studenti:
-        data = s.to_mongo().to_dict()
-        data["_id"] = str(data["_id"])
-        result.append(data)
-    return jsonify(result)
+        s["_id"] = str(s["_id"])
+    return jsonify(studenti)
 
 
-# Crea uno studente, gestendo anche esami embedded e modulo snapshot
 @studenti_bp.route("/", methods=["POST"])
 def create_studente():
+    """Crea nuovo studente con embedded documents"""
+    db = current_app.config["MONGO_DB"]
     data = request.json
-    esami_data = data.pop("esami", [])
-    esami = []
-    for esame in esami_data:
-        modulo_data = esame.get("modulo")
-        if modulo_data:
-            modulo = ModuloSnapshot(**modulo_data)
-            esame["modulo"] = modulo
-        esami.append(EsameEmbedded(**esame))
-    studente = Studente(**data, esami=esami)
-    studente.save()
-    result = studente.to_mongo().to_dict()
-    result["_id"] = str(result["_id"])
-    return jsonify(result), 201
+
+    # Validazione base
+    if not data.get("nome") or not data.get("email"):
+        return jsonify({"error": "Nome ed email sono obbligatori"}), 400
+
+    # PyMongo gestisce automaticamente gli embedded documents come dict annidati
+    result = db.studente.insert_one(data)
+    data["_id"] = str(result.inserted_id)
+    return jsonify(data), 201
 
 
 @studenti_bp.route("/<string:studente_id>", methods=["GET"])
 def get_studente(studente_id):
-    studente = Studente.objects(id=studente_id).first()
+    """Dettaglio studente specifico"""
+    db = current_app.config["MONGO_DB"]
+
+    try:
+        studente = db.studente.find_one({"_id": ObjectId(studente_id)})
+    except:
+        return jsonify({"error": "ID non valido"}), 400
+
     if not studente:
         return jsonify({"error": "Studente non trovato"}), 404
-    result = studente.to_mongo().to_dict()
-    result["_id"] = str(result["_id"])
-    return jsonify(result)
+
+    studente["_id"] = str(studente["_id"])
+    return jsonify(studente)
 
 
-# Aggiorna uno studente, gestendo anche esami embedded e modulo snapshot
 @studenti_bp.route("/<string:studente_id>", methods=["PUT"])
 def update_studente(studente_id):
+    """Aggiorna studente esistente"""
+    db = current_app.config["MONGO_DB"]
     data = request.json
-    studente = Studente.objects(id=studente_id).first()
-    if not studente:
+
+    try:
+        result = db.studente.update_one({"_id": ObjectId(studente_id)}, {"$set": data})
+    except:
+        return jsonify({"error": "ID non valido"}), 400
+
+    if result.matched_count == 0:
         return jsonify({"error": "Studente non trovato"}), 404
-    esami_data = data.pop("esami", None)
-    if esami_data is not None:
-        esami = []
-        for esame in esami_data:
-            modulo_data = esame.get("modulo")
-            if modulo_data:
-                modulo = ModuloSnapshot(**modulo_data)
-                esame["modulo"] = modulo
-            esami.append(EsameEmbedded(**esame))
-        data["esami"] = esami
-    studente.update(**data)
-    studente.reload()
-    result = studente.to_mongo().to_dict()
-    result["_id"] = str(result["_id"])
-    return jsonify(result)
+
+    # Recupera documento aggiornato
+    studente = db.studente.find_one({"_id": ObjectId(studente_id)})
+    studente["_id"] = str(studente["_id"])
+    return jsonify(studente)
 
 
 @studenti_bp.route("/<string:studente_id>", methods=["DELETE"])
 def delete_studente(studente_id):
-    studente = Studente.objects(id=studente_id).first()
-    if not studente:
+    """Elimina studente"""
+    db = current_app.config["MONGO_DB"]
+
+    try:
+        result = db.studente.delete_one({"_id": ObjectId(studente_id)})
+    except:
+        return jsonify({"error": "ID non valido"}), 400
+
+    if result.deleted_count == 0:
         return jsonify({"error": "Studente non trovato"}), 404
-    studente.delete()
+
     return "", 204
