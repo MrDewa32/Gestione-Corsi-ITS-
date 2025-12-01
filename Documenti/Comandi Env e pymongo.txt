@@ -7,3 +7,7 @@ Terzo passaggio
 pip install pymongo
 Quarto passaggio
 pip install Faker
+
+pip install -r requirments.txt installa tutto ciò che è scritto nel file txt
+
+python -m app.utils.genera_dati serve a creare e inserire i dati di default
