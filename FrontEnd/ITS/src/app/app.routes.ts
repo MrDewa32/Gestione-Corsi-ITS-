@@ -8,6 +8,7 @@ import { Creacorso } from './creacorso/creacorso';
 export const routes: Routes = [
     { path: '', component: Homepage, title: 'Home' },
     { path: 'corsi', component: Corso, title: 'Corsi' },
-    { path: 'login', component: FormCompilazione, title: 'Accedi' }, // 👈 Aggiunto
+    { path: 'login', component: FormCompilazione, title: 'Accedi' },
+    { path: 'creacorso', component: Creacorso, title: 'Crea Corso' },
 ];
 
