@@ -1,6 +1,6 @@
 /* Sfondo con immagine */
 .login-background {
-  background-image: url('/FrontEnd/ITS/src/assets/sfondo_login.jpg');
+  background-image: url('/sfondo_login.jpg');
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -13,8 +13,8 @@
 
 /* Box bianco centrale */
 .login-box {
-  width: 540px;
-  padding: 50px 40px;
+  width: 400px;
+  padding: 30px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 30px;
   border: 4px solid black;
