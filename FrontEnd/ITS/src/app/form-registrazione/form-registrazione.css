@@ -1,0 +1,144 @@
+.form-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70px 20px 20px 20px;
+  gap: 20px;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.form-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 20px 0 30px 0;
+  color: #1f2937;
+  width: 100%;
+}
+
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d6cdf;
+  margin: 0 0 10px 0;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-text {
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input, textarea, select {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #2d6cdf;
+  box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.1);
+}
+
+input:invalid, textarea:invalid, select:invalid {
+  border-color: #fca5a5;
+}
+
+.error {
+  display: block;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.error span {
+  display: block;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.btn-submit {
+  padding: 12px 32px;
+  border: none;
+  background-color: #2d6cdf;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.btn-submit:hover:not([disabled]) {
+  background-color: #1f4cad;
+  box-shadow: 0 4px 12px rgba(45, 108, 223, 0.3);
+}
+
+.btn-submit[disabled] {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .form-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .form-container {
+    grid-template-columns: 1fr;
+  }
+
+  .form-title {
+    font-size: 22px;
+  }
+
+  .form-root {
+    padding: 12px;
+    gap: 15px;
+  }
+}

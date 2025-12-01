@@ -1,0 +1,104 @@
+<div class="form-root">
+  <h1 class="form-title">Aggiungi un nuovo studente</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container" novalidate>
+   
+    <div class="form-column">
+
+      <label class="field">
+        <span class="label-text">Nome</span>
+        <input type="text" formControlName="nome" autofocus />
+        <small class="error" *ngIf="submitted && f['nome'].invalid">Obbligatorio</small>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Cognome</span>
+        <input type="text" formControlName="cognome" />
+        <small class="error" *ngIf="submitted && f['cognome'].invalid">Obbligatorio</small>
+      </label>
+
+      <label class="field">
+        <span class="label-text">E-mail</span>
+        <input type="email" formControlName="email" placeholder="esempio@dominio.it" />
+        <small class="error" *ngIf="submitted && f['email'].invalid">
+          <span *ngIf="f['email'].errors?.['required']">Obbligatoria</span>
+          <span *ngIf="f['email'].errors?.['email']">Non valida</span>
+        </small>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Numero di telefono</span>
+        <input type="tel" formControlName="telefono" placeholder="+39 333 1234567" />
+      </label>
+    </div>
+
+    <div class="form-column">
+
+      <label class="field">
+        <span class="label-text">Tipo documento</span>
+        <select formControlName="documento">
+          <option value="carta_identita">Carta d'identità</option>
+          <option value="patente">Patente</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Numero documento</span>
+        <input type="text" formControlName="numeroDocumento" />
+        <small class="error" *ngIf="submitted && f['numeroDocumento'].invalid">Obbligatorio</small>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Domicilio</span>
+        <input type="text" formControlName="domicilio" />
+      </label>
+
+      <label class="field">
+        <span class="label-text">Corso</span>
+        <select formControlName="corso">
+          <option value="developer">Developer</option>
+          <option value="game_developer">Game Developer</option>
+          <option value="cyber_security">Cyber Security</option>
+          <option value="3d_artist">3D Artist</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-column">
+
+      <label class="field">
+        <span class="label-text">Esito test</span>
+        <input type="text" formControlName="esitoTest" />
+      </label>
+
+      <label class="field">
+        <span class="label-text">Colloquio</span>
+        <input type="text" formControlName="colloquio" />
+      </label>
+
+      <label class="field">
+        <span class="label-text">Crea password</span>
+        <input type="password" formControlName="password" />
+        <small class="error" *ngIf="submitted && f['password'].invalid">
+          <span *ngIf="f['password'].errors?.['required']">Obbligatoria</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Min 6 caratteri</span>
+        </small>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Note interne</span>
+        <textarea formControlName="noteInterne" rows="3" placeholder="Note..."></textarea>
+      </label>
+    </div>
+  </form>
+
+  <div class="form-footer">
+    <button type="submit" (click)="onSubmit()" class="btn-submit">Registra studente</button>
+  </div>
+</div>
+
+
+
+
+
+  
