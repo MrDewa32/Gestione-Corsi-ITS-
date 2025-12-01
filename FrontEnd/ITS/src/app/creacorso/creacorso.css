@@ -1,0 +1,22 @@
+#creacorso {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+#creacorso-title {
+    font-family: 'fatface';
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+#note{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    resize: none;
+}
+#selettore {
+    margin-bottom: 20px;
+}

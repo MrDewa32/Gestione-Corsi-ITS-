@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,35 +15,39 @@ export class FormRegistrazioneComponent {
 	form: FormGroup;
 	submitted = false;
 
-	constructor(private fb: FormBuilder) {
+	constructor(private fb: FormBuilder, private router: Router) {
 		this.form = this.fb.group({
 			nome: ['', Validators.required],
 			cognome: ['', Validators.required],
 			email: ['', [Validators.required, Validators.email]],
-			documento: ['', Validators.required],
+			telefono: [''],
+			documento: ['carta_identita'],
 			numeroDocumento: ['', Validators.required],
-			domicilio: ['', Validators.required],
-			corso: ['', Validators.required],
-			telefono: ['', Validators.required],
-			esitoTest: ['', Validators.required],
-			colloquio: ['', Validators.required],
+			domicilio: [''],
+			corso: ['developer'],
+			esitoTest: [''],
+			colloquio: [''],
 			password: ['', [Validators.required, Validators.minLength(6)]],
 			noteInterne: ['']
 		});
 	}
 
+	// Getter per accedere facilmente ai controlli del form nel template
 	get f() {
 		return this.form.controls;
 	}
 
 	onSubmit() {
 		this.submitted = true;
+
 		if (this.form.valid) {
-			console.log('Nuovo studente:', this.form.value);
-			// mostra messaggio di successo e reset form
-			alert('Registrazione effettuata con successo');
-			this.form.reset();
-			this.submitted = false;
+			console.log('Dati studente registrato:', this.form.value);
+			
+			// Qui puoi aggiungere la chiamata al servizio per salvare i dati
+			// Per ora navighiamo alla lista studenti o alla home
+			this.router.navigate(['/elencostudenti']);
+		} else {
+			console.log('Form non valido. Controlla i campi obbligatori.');
 		}
 	}
 }
