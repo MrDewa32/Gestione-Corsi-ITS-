@@ -15,4 +15,7 @@ def create_app():
 
     app.register_blueprint(studenti_bp, url_prefix="/studenti")
 
+    from app.routes.modulo import modulo_bp
+    app.register_blueprint(modulo_bp, url_prefix="/moduli")
+
     return app
