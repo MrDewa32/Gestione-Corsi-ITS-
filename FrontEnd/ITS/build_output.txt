@@ -1,0 +1,13 @@
+[33mÔØ»[39m Building...
+[32mÔ£ö[39m Building...
+Application bundle generation failed. [1.702 seconds] - 2025-12-02T10:32:56.208Z
+
+X [ERROR] Could not resolve "@angular/animations/browser"
+
+    node_modules/@angular/platform-browser/fesm2022/animations-async.mjs:37:53:
+      37 Ôöé ....moduleImpl ?? import('@angular/animations/browser').then(m => m);
+         ÔòÁ                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@angular/animations/browser" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle. You can also add ".catch()" here to handle this failure at run-time instead of bundle-time.
+
+
