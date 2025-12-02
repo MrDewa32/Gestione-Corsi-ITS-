@@ -16,5 +16,4 @@ export const routes: Routes = [
     { path: 'creacorso', component: Creacorso, title: 'Crea Corso' },
     { path: 'elencostudenti', component: Elencostudenti, title: 'Elenco Studenti' },
     { path: 'calendari', component: Calendari, title: 'Calendari' },
-    { path: 'modal-eliminacorso', component: ModalDeleteCourseComponent, title: 'Elimina Corso' },
 ];
