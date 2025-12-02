@@ -10,6 +10,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+#titolodiaccesso {
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
 /* Form styling */
@@ -17,25 +26,45 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
-  padding: 32px;
+  width: 100% !important;
+  max-width: 700px !important;
+  padding: 48px !important;
   border-radius: 12px;
   background-color: white;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-mat-form-field {
-  width: 100%;
-  margin-bottom: 10px;
+::ng-deep mat-form-field {
+  width: 100% !important;
+  margin-bottom: 20px !important;
+  font-size: 16px !important;
 }
 
-button {
-  width: 100%;
-  margin-top: 10px;
+::ng-deep .mat-mdc-text-field-wrapper {
+  width: 100% !important;
 }
-#titolodiaccesso {
-  font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 10px;
+
+::ng-deep .mat-mdc-form-field-infix {
+  min-height: 56px !important;
+}
+
+/* Better center the password visibility button */
+::ng-deep mat-form-field button[mat-icon-button] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 10px !important;
+}
+
+::ng-deep mat-form-field .mat-mdc-icon-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+button[mat-raised-button] {
+  width: 100% !important;
+  margin-top: 20px !important;
+  height: 48px !important;
+  font-size: 16px !important;
 }
