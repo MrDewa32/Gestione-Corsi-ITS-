@@ -1,1 +1,51 @@
-<p>calendari works!</p>
+<div class="calendari-container">
+    <div class="header-section">
+        <h1 class="mat-display-1">Calendario Lezioni</h1>
+        <p class="mat-body-1">Visualizza e gestisci le tue lezioni ed esami.</p>
+    </div>
+
+    <div class="content-grid">
+        <!-- Calendar Section -->
+        <mat-card class="calendar-card">
+            <mat-card-header>
+                <mat-card-title>Seleziona Data</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-calendar [(selected)]="selectedDate" (selectedChange)="onDateSelected($event)"></mat-calendar>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Events Section -->
+        <mat-card class="events-card">
+            <mat-card-header>
+                <mat-card-title>
+                    Eventi del {{ selectedDate | date: 'dd/MM/yyyy' }}
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <div *ngFor="let event of events">
+                        <mat-list-item>
+                            <mat-icon matListItemIcon
+                                [ngClass]="{'lecture-icon': event.type === 'lecture', 'exam-icon': event.type === 'exam', 'lab-icon': event.type === 'lab', 'break-icon': event.type === 'break'}">
+                                {{ event.type === 'lecture' ? 'school' : event.type === 'exam' ? 'assignment' :
+                                event.type === 'lab' ? 'computer' : 'coffee' }}
+                            </mat-icon>
+                            <div matListItemTitle>{{ event.title }}</div>
+                            <div matListItemLine>{{ event.time }}</div>
+                            <div matListItemLine class="event-description">{{ event.description }}</div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </div>
+                </mat-list>
+
+                <div *ngIf="events.length === 0" class="no-events">
+                    <p>Nessun evento programmato per questa data.</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="primary">AGGIUNGI EVENTO</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

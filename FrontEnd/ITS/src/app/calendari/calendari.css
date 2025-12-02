@@ -1,0 +1,69 @@
+.calendari-container {
+    padding: 24px;
+    padding-top: 80px;
+    /* Added to account for fixed navbar */
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.header-section {
+    margin-bottom: 24px;
+}
+
+.header-section h1 {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 960px) {
+    .content-grid {
+        grid-template-columns: 350px 1fr;
+    }
+}
+
+.calendar-card {
+    height: fit-content;
+}
+
+.events-card {
+    min-height: 400px;
+}
+
+.event-description {
+    color: #666;
+    font-style: italic;
+}
+
+.no-events {
+    padding: 24px;
+    text-align: center;
+    color: #888;
+}
+
+/* Icon colors based on type */
+.lecture-icon {
+    color: #3f51b5;
+}
+
+.exam-icon {
+    color: #f44336;
+}
+
+.lab-icon {
+    color: #ff9800;
+}
+
+.break-icon {
+    color: #4caf50;
+}
+
+mat-divider {
+    margin: 8px 0;
+}
