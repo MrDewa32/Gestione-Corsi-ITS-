@@ -1,0 +1,21 @@
+<div class="overlay" (click)="close()"></div>
+
+<div class="modal">
+  <h2>
+    Sei sicuro di voler eliminare il corso<br>
+    <strong>{{ courseName }}?</strong>
+  </h2>
+
+  <label for="password">Digita la tua password</label>
+  <input
+    id="password"
+    type="password"
+    [(ngModel)]="password"
+    placeholder="Password"
+  />
+
+  <div class="buttons">
+    <button class="confirm" (click)="confirmDelete()">Elimina</button>
+    <button class="cancel" (click)="close()">Annulla</button>
+  </div>
+</div>
