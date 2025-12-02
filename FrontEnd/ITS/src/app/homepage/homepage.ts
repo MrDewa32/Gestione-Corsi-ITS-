@@ -11,5 +11,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './homepage.css'
 })
 export class Homepage {
-  
+  nome = "Ciccio"
 }
