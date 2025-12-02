@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -124,7 +124,7 @@ export class Calendari {
   allEvents: EventData[] = [];
   filteredEvents: EventData[] = [];
 
-  constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(public dialog: MatDialog, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.loadEvents();
   }
 
@@ -228,7 +228,7 @@ export class Calendari {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        result.date = this.selectedDate;
+        result.date = new Date(this.selectedDate!.getTime());
 
         // Check for overlap
         if (this.checkOverlap(result)) {
@@ -245,6 +245,7 @@ export class Calendari {
         this.allEvents = [...this.allEvents, result];
         this.saveEvents();
         this.filterEvents();
+        this.cdr.detectChanges();
 
         this.snackBar.open('Evento aggiunto con successo!', 'Chiudi', {
           duration: 3000,
