@@ -8,7 +8,7 @@ studenti_bp = Blueprint("studenti", __name__)
 def get_studenti():
     """Lista tutti gli studenti"""
     db = current_app.config["MONGO_DB"]
-    studenti = list(db.studente.find())  # Usa 'studente' non 'studenti'
+    studenti = list(db.studente.find())
     for s in studenti:
         s["_id"] = str(s["_id"])
     return jsonify(studenti)
@@ -20,11 +20,10 @@ def create_studente():
     db = current_app.config["MONGO_DB"]
     data = request.json
 
-    # Validazione base
     if not data.get("nome") or not data.get("email"):
         return jsonify({"error": "Nome ed email sono obbligatori"}), 400
 
-    # PyMongo gestisce automaticamente gli embedded documents come dict annidati
+    # PyMongo gestisce automaticamente gli embedded documents come dict annidati, non devo fare nulla di strano come in MongoEngine....😒
     result = db.studente.insert_one(data)
     data["_id"] = str(result.inserted_id)
     return jsonify(data), 201
