@@ -1,17 +1,19 @@
 <div class="login-background">
   <div class="login-box">
-    <h1>Accedi al tuo Gestionale</h1>
-
-    <div class="input-group">
-      <label>Inserisci la mail:</label>
-      <input type="email" placeholder="">
-    </div>
-
-    <div class="input-group">
-      <label>Inserisci la password:</label>
-      <input type="password" placeholder="">
-    </div>
-
-    <button class="login-btn">Accedi</button>
+    <h1 style="font-weight: bold; font-size: 24px; margin-bottom: 10px;">Accedi</h1>
+    <form [formGroup]="loginForm">
+      <mat-form-field>
+        <mat-label>Mail</mat-label>
+        <input matInput type="email" formControlName="email">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Accedi</button>
+    </form>
   </div>
 </div>

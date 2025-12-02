@@ -1,69 +1,36 @@
-/* Sfondo con immagine */
 .login-background {
-  background-image: url('/sfondo_login.jpg');
-  background-size: cover;
-  background-position: center;
-  width: 100vw;
-  height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100%;
 }
 
-/* Box bianco centrale */
 .login-box {
-  width: 400px;
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 30px;
-  border: 4px solid black;
-
-  text-align: left;
-  font-family: "Georgia", serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Titolo */
-.login-box h1 {
-  text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 40px;
-}
-
-/* Gruppi input */
-.input-group {
-  margin-bottom: 35px;
-}
-
-label {
-  display: block;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-
-/* Campi */
-input {
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  padding: 15px;
-  border: none;
+  max-width: 400px;
+  padding: 32px;
   border-radius: 12px;
-  background: #E5E5E5;
-  font-size: 18px;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* Bottone */
-.login-btn {
+mat-form-field {
   width: 100%;
-  padding: 15px 0;
-  background: #C4C4C4;
-  border: none;
-  border-radius: 12px;
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
+  margin-bottom: 10px;
 }
 
-.login-btn:hover {
-  background: #b0b0b0;
+button {
+  width: 100%;
+  margin-top: 10px;
 }
