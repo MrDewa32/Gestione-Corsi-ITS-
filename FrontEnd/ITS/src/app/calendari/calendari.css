@@ -8,12 +8,36 @@
 }
 
 .header-section {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.header-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #3f51b5;
+}
+
+.header-text {
+    flex: 1;
 }
 
 .header-section h1 {
-    margin-bottom: 8px;
-    color: #333;
+    margin: 0 0 8px 0;
+    color: #1a237e;
+    font-weight: 500;
+}
+
+.header-section p {
+    margin: 0;
+    color: #616161;
 }
 
 .content-grid {
@@ -64,6 +88,19 @@
     color: #4caf50;
 }
 
+.internship-icon {
+    color: #9c27b0;
+}
+
 mat-divider {
     margin: 8px 0;
+}
+
+.delete-button {
+    color: #f44336;
+    opacity: 0.7;
+}
+
+.delete-button:hover {
+    opacity: 1;
 }

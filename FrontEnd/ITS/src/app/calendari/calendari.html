@@ -1,7 +1,13 @@
 <div class="calendari-container">
     <div class="header-section">
-        <h1 class="mat-display-1" style="text-align: center; margin-top: 20px; font-weight: bold; font-size: 24px;">Calendario Lezioni</h1>
-        <p class="mat-body-1" style="text-align: center; margin-bottom: 20px;">Visualizza e gestisci le tue lezioni ed esami.</p>
+        <div class="header-content">
+            <mat-icon class="header-icon">event</mat-icon>
+            <div class="header-text">
+                <h1 class="mat-display-1">Calendario Lezioni</h1>
+                <p class="mat-body-1">Organizza e gestisci i tuoi eventi accademici</p>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
     </div>
 
     <div class="content-grid">
@@ -24,27 +30,30 @@
             </mat-card-header>
             <mat-card-content>
                 <mat-list>
-                    <div *ngFor="let event of events">
+                    <div *ngFor="let event of filteredEvents">
                         <mat-list-item>
                             <mat-icon matListItemIcon
-                                [ngClass]="{'lecture-icon': event.type === 'lecture', 'exam-icon': event.type === 'exam', 'lab-icon': event.type === 'lab', 'break-icon': event.type === 'break'}">
+                                [ngClass]="{'lecture-icon': event.type === 'lecture', 'exam-icon': event.type === 'exam', 'lab-icon': event.type === 'lab', 'break-icon': event.type === 'break', 'internship-icon': event.type === 'internship'}">
                                 {{ event.type === 'lecture' ? 'school' : event.type === 'exam' ? 'assignment' :
-                                event.type === 'lab' ? 'computer' : 'coffee' }}
+                                event.type === 'lab' ? 'computer' : event.type === 'break' ? 'coffee' : 'work' }}
                             </mat-icon>
                             <div matListItemTitle>{{ event.title }}</div>
                             <div matListItemLine>{{ event.time }}</div>
                             <div matListItemLine class="event-description">{{ event.description }}</div>
+                            <button mat-icon-button class="delete-button" (click)="deleteEvent(event)" matListItemMeta>
+                                <mat-icon>delete</mat-icon>
+                            </button>
                         </mat-list-item>
                         <mat-divider></mat-divider>
                     </div>
                 </mat-list>
 
-                <div *ngIf="events.length === 0" class="no-events">
+                <div *ngIf="filteredEvents.length === 0" class="no-events">
                     <p>Nessun evento programmato per questa data.</p>
                 </div>
             </mat-card-content>
             <mat-card-actions align="end">
-                <button mat-button color="primary">AGGIUNGI EVENTO</button>
+                <button mat-button color="primary" (click)="openAddEventDialog()">AGGIUNGI EVENTO</button>
             </mat-card-actions>
         </mat-card>
     </div>
