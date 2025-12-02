@@ -7,12 +7,14 @@ import { Creacorso } from './creacorso/creacorso';
 import { Elencostudenti } from './elencostudenti/elencostudenti';
 import { Calendari } from './calendari/calendari';
 
+
 export const routes: Routes = [
     { path: '', component: Homepage, title: 'Home' },
     { path: 'corsi', component: Corso, title: 'Corsi' },
     { path: 'login', component: FormCompilazione, title: 'Accedi' },
+    { path: 'registrazione', component: FormRegistrazioneComponent, title: 'Registrazione' },
     { path: 'creacorso', component: Creacorso, title: 'Crea Corso' },
     { path: 'elencostudenti', component: Elencostudenti, title: 'Elenco Studenti' },
     { path: 'calendari', component: Calendari, title: 'Calendari' },
+    
 ];
-
