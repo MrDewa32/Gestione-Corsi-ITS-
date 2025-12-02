@@ -6,6 +6,7 @@ import { FormCompilazione } from './form-compilazione/form-compilazione';
 import { Creacorso } from './creacorso/creacorso';
 import { Elencostudenti } from './elencostudenti/elencostudenti';
 import { Calendari } from './calendari/calendari';
+import { ModalDeleteCourseComponent } from './modal-eliminacorso/modal-eliminacorso';
 
 export const routes: Routes = [
     { path: '', component: Homepage, title: 'Home' },
@@ -15,5 +16,5 @@ export const routes: Routes = [
     { path: 'creacorso', component: Creacorso, title: 'Crea Corso' },
     { path: 'elencostudenti', component: Elencostudenti, title: 'Elenco Studenti' },
     { path: 'calendari', component: Calendari, title: 'Calendari' },
-
+    { path: 'modal-eliminacorso', component: ModalDeleteCourseComponent, title: 'Elimina Corso' },
 ];

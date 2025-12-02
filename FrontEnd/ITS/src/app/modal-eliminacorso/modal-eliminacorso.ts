@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './modal-eliminacorso.html',
   styleUrls: ['./modal-eliminacorso.css']
 })
+
 export class ModalDeleteCourseComponent {
   @Input() courseName: string = '';
   @Output() deleteConfirmed = new EventEmitter<string>();
