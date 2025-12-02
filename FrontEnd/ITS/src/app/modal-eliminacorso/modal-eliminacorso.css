@@ -70,3 +70,7 @@ button:not([mat-icon-button]) {
 .cancel {
   background: #ddd;
 }
+
+.password-toggle-btn {
+  margin-right: 8px;
+}
