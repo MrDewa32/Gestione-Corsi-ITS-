@@ -1,21 +1,20 @@
-<div class="overlay" (click)="close()"></div>
+<h2 mat-dialog-title>
+  Sei sicuro di voler eliminare il corso<br>
+  <strong>{{ data.titolo }}</strong>
+</h2>
 
-<div class="modal">
-  <h2>
-    Sei sicuro di voler eliminare il corso<br>
-    <strong>{{ courseName }}?</strong>
-  </h2>
+<mat-dialog-content style="padding-top: 20px;">
+  <mat-form-field>
+    <mat-label>Enter your password</mat-label>
+    <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="password" />
+    <button matIconButton matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide()">
+      <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</mat-dialog-content>
 
-  <label for="password">Digita la tua password</label>
-  <input
-    id="password"
-    type="password"
-    [(ngModel)]="password"
-    placeholder="Password"
-  />
-
-  <div class="buttons">
-    <button class="confirm" (click)="confirmDelete()">Elimina</button>
-    <button class="cancel" (click)="close()">Annulla</button>
-  </div>
-</div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" class="cancel" cdkFocusInitial>Annulla</button>
+  <button mat-button (click)="onConfirm()" class="confirm" [disabled]="!password">Elimina</button>
+</mat-dialog-actions>
