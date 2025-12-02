@@ -17,35 +17,44 @@
   </div>
 
   <!-- Tabella studenti -->
+  <!-- Search Bar -->
+  <div class="search-container" *ngIf="showFilter">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cerca</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Cerca per nome, cognome, email..." #input>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
   <div class="table-wrapper">
-    <table mat-table [dataSource]="dataSource" class="studenti-table">
+    <table mat-table [dataSource]="dataSource" matSort class="studenti-table">
       <!-- Nome Column -->
       <ng-container matColumnDef="nome">
-        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
         <td mat-cell *matCellDef="let element">{{ element.nome }}</td>
       </ng-container>
 
       <!-- Cognome Column -->
       <ng-container matColumnDef="cognome">
-        <th mat-header-cell *matHeaderCellDef>Cognome</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cognome</th>
         <td mat-cell *matCellDef="let element">{{ element.cognome }}</td>
       </ng-container>
 
       <!-- Email Column -->
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>E-mail</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</th>
         <td mat-cell *matCellDef="let element">{{ element.email }}</td>
       </ng-container>
 
       <!-- Corso Column -->
       <ng-container matColumnDef="corso">
-        <th mat-header-cell *matHeaderCellDef>Corso</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Corso</th>
         <td mat-cell *matCellDef="let element">{{ element.corso }}</td>
       </ng-container>
 
       <!-- Stato Iscrizione Column -->
       <ng-container matColumnDef="stato">
-        <th mat-header-cell *matHeaderCellDef>Stato Iscrizione</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stato Iscrizione</th>
         <td mat-cell *matCellDef="let element">
           <span class="stato-badge" [ngClass]="getStatoClass(element.stato)">
             {{ getStatoLabel(element.stato) }}
@@ -57,20 +66,12 @@
       <ng-container matColumnDef="azioni">
         <th mat-header-cell *matHeaderCellDef>Azioni</th>
         <td mat-cell *matCellDef="let element" class="cell-azioni">
-          <button
-            mat-icon-button
-            (click)="marcaVisualizzato(element.id)"
-            [matTooltip]="element.visualizzato ? 'Nascondi' : 'Visualizza'"
-            class="btn-action btn-visualizza"
-          >
+          <button mat-icon-button (click)="marcaVisualizzato(element.id)"
+            [matTooltip]="element.visualizzato ? 'Nascondi' : 'Visualizza'" class="btn-action btn-visualizza">
             <mat-icon>{{ element.visualizzato ? 'visibility' : 'visibility_off' }}</mat-icon>
           </button>
-          <button
-            mat-icon-button
-            (click)="rimuoviIscrizione(element.id)"
-            matTooltip="Rimuovi iscrizione"
-            class="btn-action btn-rimuovi"
-          >
+          <button mat-icon-button (click)="rimuoviIscrizione(element.id)" matTooltip="Rimuovi iscrizione"
+            class="btn-action btn-rimuovi">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
@@ -82,10 +83,9 @@
     </table>
 
     <!-- Empty state -->
-    <div *ngIf="dataSource.length === 0" class="empty-state">
+    <div *ngIf="dataSource.data.length === 0" class="empty-state">
       <mat-icon class="empty-icon">people_outline</mat-icon>
       <p>Nessuno studente trovato</p>
     </div>
   </div>
 </div>
-

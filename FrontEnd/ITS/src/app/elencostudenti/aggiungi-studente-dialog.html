@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Aggiungi Nuovo Studente</h2>
+<mat-dialog-content>
+    <form [formGroup]="studentForm" class="student-form">
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" placeholder="Inserisci nome">
+            <mat-error *ngIf="studentForm.get('nome')?.hasError('required')">
+                Il nome è obbligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Cognome</mat-label>
+            <input matInput formControlName="cognome" placeholder="Inserisci cognome">
+            <mat-error *ngIf="studentForm.get('cognome')?.hasError('required')">
+                Il cognome è obbligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="Inserisci email" type="email">
+            <mat-error *ngIf="studentForm.get('email')?.hasError('required')">
+                L'email è obbligatoria
+            </mat-error>
+            <mat-error *ngIf="studentForm.get('email')?.hasError('email')">
+                Inserisci un'email valida
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Corso</mat-label>
+            <input matInput formControlName="corso" placeholder="Inserisci corso">
+            <mat-error *ngIf="studentForm.get('corso')?.hasError('required')">
+                Il corso è obbligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Stato</mat-label>
+            <mat-select formControlName="stato">
+                <mat-option value="ammesso">Ammesso</mat-option>
+                <mat-option value="non_ammesso">Non Ammesso</mat-option>
+                <mat-option value="sospeso">Sospeso</mat-option>
+            </mat-select>
+            <mat-error *ngIf="studentForm.get('stato')?.hasError('required')">
+                Lo stato è obbligatorio
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Annulla</button>
+    <button mat-raised-button color="primary" [disabled]="studentForm.invalid" (click)="onSave()">Salva</button>
+</mat-dialog-actions>

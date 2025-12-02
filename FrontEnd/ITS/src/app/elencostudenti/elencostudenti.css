@@ -38,6 +38,19 @@
   letter-spacing: 1.25px;
 }
 
+/* Search Bar */
+.search-container {
+  margin-bottom: 16px;
+  background: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.full-width {
+  width: 100%;
+}
+
 /* Wrapper tabella */
 .table-wrapper {
   background: #ffffff;
