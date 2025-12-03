@@ -123,48 +123,42 @@ def voti_alti_studenti():
 
 @studenti_bp.route("/media/<string:studente_id>", methods=["GET"])
 def media_studente(studente_id):
-    """Media voti di uno studente specifico"""
     db = current_app.config["MONGO_DB"]
+
     try:
-        s = db.studente.find_one({"_id": ObjectId(studente_id)})
+        oid = ObjectId(studente_id)
     except:
         return jsonify({"error": "ID non valido"}), 400
 
-    if not s:
-        return jsonify({"error": "Studente non trovato"}), 404
+    s = db.studente.find_one({"_id": oid})
 
     esami = s.get("esami", [])
     voti = [e.get("voto") for e in esami if "voto" in e]
     media = round(sum(voti) / len(voti), 2) if voti else None
 
-    risultato = {
+    return jsonify({
         "cognome": s.get("cognome"),
         "nome": s.get("nome"),
         "voti": media
-    }
-
-    return jsonify(risultato), 200
+    }), 200
 
 
 @studenti_bp.route("/voti-alti/<string:studente_id>", methods=["GET"])
 def voti_alti_studente(studente_id):
-    """Voti >=24 di uno studente specifico"""
     db = current_app.config["MONGO_DB"]
+
     try:
-        s = db.studente.find_one({"_id": ObjectId(studente_id)})
+        oid = ObjectId(studente_id)
     except:
         return jsonify({"error": "ID non valido"}), 400
 
-    if not s:
-        return jsonify({"error": "Studente non trovato"}), 404
+    s = db.studente.find_one({"_id": oid})
 
     esami = s.get("esami", [])
     voti_alti = [e.get("voto") for e in esami if e.get("voto", 0) >= 24]
 
-    risultato = {
+    return jsonify({
         "cognome": s.get("cognome"),
         "nome": s.get("nome"),
         "voti": voti_alti
-    }
-
-    return jsonify(risultato), 200
+    }), 200
