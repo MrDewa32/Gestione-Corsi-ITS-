@@ -20,7 +20,7 @@
   <!-- Search Bar -->
   <div class="search-container" *ngIf="showFilter">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Cerca</mat-label>
+      <label></label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Cerca per nome, cognome, email..." #input>
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
