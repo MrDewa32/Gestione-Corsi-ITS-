@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +26,7 @@ const ELEMENT_DATA: AlunnoElement[] = [
 
 @Component({
   selector: 'app-listaalunni',
-  imports: [CommonModule, RouterLink, MatListModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './listaalunni.html',
   styleUrl: './listaalunni.css',
 })
