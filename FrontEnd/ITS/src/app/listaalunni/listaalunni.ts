@@ -3,34 +3,59 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface AlunnoElement {
   position: number;
-  name: string;
+  nome: string;
   voto: number;
-  symbol: string;
 }
 
 const ELEMENT_DATA: AlunnoElement[] = [
-  {position: 1, name: 'Mario Rossi', voto: 1, symbol: 'H'},
-  {position: 2, name: 'Luca Bianchi', voto: 4, symbol: 'He'},
-  {position: 3, name: 'Anna Verdi', voto: 6, symbol: 'Li'},
-  {position: 4, name: 'Giulia Neri', voto: 9, symbol: 'Be'},
-  {position: 5, name: 'Marco Ferrari', voto: 10, symbol: 'B'},
-  {position: 6, name: 'Sara Romano', voto: 12, symbol: 'C'},
-  {position: 7, name: 'Paolo Colombo', voto: 14, symbol: 'N'},
-  {position: 8, name: 'Elena Ricci', voto: 15, symbol: 'O'},
-  {position: 9, name: 'Andrea Marino', voto: 18, symbol: 'F'},
-  {position: 10, name: 'Chiara Greco', voto: 20, symbol: 'Ne'},
+  {position: 1, nome: 'Mario Rossi', voto: 1},
+  {position: 2, nome: 'Luca Bianchi', voto: 4},
+  {position: 3, nome: 'Anna Verdi', voto: 6},
+  {position: 4, nome: 'Giulia Neri', voto: 9},
+  {position: 5, nome: 'Marco Ferrari', voto: 10},
+  {position: 6, nome: 'Sara Romano', voto: 12},
+  {position: 7, nome: 'Paolo Colombo', voto: 14},
+  {position: 8, nome: 'Elena Ricci', voto: 15},
+  {position: 9, nome: 'Andrea Marino', voto: 18},
+  {position: 10, nome: 'Chiara Greco', voto: 20},
 ];
 
 @Component({
   selector: 'app-listaalunni',
-  imports: [CommonModule, RouterLink, MatListModule, MatTableModule],
+  imports: [CommonModule, RouterLink, MatListModule, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './listaalunni.html',
   styleUrl: './listaalunni.css',
 })
 export class Listaalunni {
-  displayedColumns: string[] = ['position', 'name', 'voto', 'symbol'];
   dataSource = ELEMENT_DATA;
+  columnsToDisplay = ['nome', 'voto', 'position'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  expandedElement: AlunnoElement | null = null;
+
+  /** Checks whether an element is expanded. */
+  isExpanded(element: AlunnoElement) {
+    return this.expandedElement === element;
+  }
+
+  /** Toggles the expanded state of an element. */
+  toggle(element:AlunnoElement) {
+    this.expandedElement = this.isExpanded(element) ? null : element;
+  }
+
+  /** Promuove uno studente. */
+  promuovi(element: AlunnoElement) {
+    console.log('Promuovi studente:', element.nome);
+    // TODO: Implementare la logica di promozione
+  }
+
+  /** Boccia uno studente. */
+  boccia(element: AlunnoElement) {
+    console.log('Boccia studente:', element.nome);
+    // TODO: Implementare la logica di bocciatura
+  }
 }
