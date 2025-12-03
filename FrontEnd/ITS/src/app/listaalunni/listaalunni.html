@@ -2,7 +2,15 @@
     @for (column of columnsToDisplay; track column) {
     <ng-container matColumnDef="{{column}}">
         <th mat-header-cell *matHeaderCellDef>{{column}}</th>
-        <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+        <td mat-cell *matCellDef="let element">
+            @if (column === 'azioni') {
+                <button mat-icon-button color="warn" (click)="elimina(element)" aria-label="Elimina studente">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            } @else {
+                {{element[column]}}
+            }
+        </td>
     </ng-container>
     }
 

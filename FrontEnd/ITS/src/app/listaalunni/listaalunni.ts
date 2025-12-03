@@ -32,7 +32,7 @@ const ELEMENT_DATA: AlunnoElement[] = [
 })
 export class Listaalunni {
   dataSource = ELEMENT_DATA;
-  columnsToDisplay = ['nome', 'voto', 'position'];
+  columnsToDisplay = ['nome', 'voto', 'position', 'azioni'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: AlunnoElement | null = null;
 
@@ -56,5 +56,16 @@ export class Listaalunni {
   boccia(element: AlunnoElement) {
     console.log('Boccia studente:', element.nome);
     // TODO: Implementare la logica di bocciatura
+  }
+
+  /** Elimina uno studente dalla lista. */
+  elimina(element: AlunnoElement) {
+    console.log('Elimina studente:', element.nome);
+    const index = this.dataSource.indexOf(element);
+    if (index > -1) {
+      this.dataSource.splice(index, 1);
+      this.dataSource = [...this.dataSource]; // Aggiorna il dataSource per triggare il change detection
+    }
+    // TODO: Implementare la chiamata API per eliminare lo studente dal backend
   }
 }
