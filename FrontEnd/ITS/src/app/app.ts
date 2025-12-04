@@ -6,6 +6,7 @@ import { Footer } from './footer/footer';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatDividerModule,
     RouterModule,
+    HttpClientModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -23,3 +25,5 @@ import { RouterModule } from '@angular/router';
 export class App {
   protected readonly title = signal('ITS');
 }
+
+export class AppModule {}
