@@ -13,7 +13,8 @@ import { AggiungiStudenteDialog } from './aggiungi-studente-dialog';
 import { ApiService } from '../services/api';
 
 export interface Studente {
-  id: number;
+  _id?: string;  // ID di MongoDB (opzionale per nuovi studenti)
+  id?: number;   // Manteniamo per compatibilità
   nome: string;
   cognome: string;
   email: string;
@@ -73,24 +74,21 @@ export class Elencostudenti implements OnInit, AfterViewInit {
     });
   }
 
-  marcaVisualizzato(id: number): void {
-    const studente = this.dataSource.data.find(s => s.id === id);
+  marcaVisualizzato(id: string): void {
+    const studente = this.dataSource.data.find(s => s._id === id);
     if (studente) {
       studente.visualizzato = !studente.visualizzato;
       
       // Aggiorna sul backend
-      const studenteId = String(id);
-      this.apiService.aggiornaStudente(studenteId, studente).subscribe({
+      this.apiService.aggiornaStudente(id, studente).subscribe({
         next: () => console.log('Studente aggiornato'),
         error: (err) => console.error('Errore aggiornamento:', err)
       });
     }
   }
 
-  rimuoviIscrizione(id: number): void {
-    const studenteId = String(id);
-    
-    this.apiService.eliminaStudente(studenteId).subscribe({
+  rimuoviIscrizione(id: string): void {
+    this.apiService.eliminaStudente(id).subscribe({
       next: () => {
         console.log('Studente eliminato con successo');
         this.loadStudenti();
