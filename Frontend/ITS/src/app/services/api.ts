@@ -7,15 +7,27 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  private apiUrl = 'http://127.0.0.1:5000'; // URL della tua API Flask
+  private apiUrl = 'http://127.0.0.1:5000'; 
 
   constructor(private http: HttpClient) {}
 
-  getDati(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/dati`);
+  getStudenti(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/studenti/`);
   }
 
-  postData(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/route`, data);
+  getStudentiByID(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/studenti/${id}`);
+  }
+
+  creaStudente(studente: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/studenti/`, studente);
+  }
+
+  eliminaStudente(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/studenti/${id}`);
+  }
+
+  aggiornaStudente(id: string, studente: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/studenti/${id}`, studente);
   }
 }

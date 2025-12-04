@@ -10,6 +10,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AggiungiStudenteDialog } from './aggiungi-studente-dialog';
+import { ApiService } from '../services/api';
 
 export interface Studente {
   id: number;
@@ -46,7 +47,10 @@ export class Elencostudenti implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private apiService: ApiService
+  ) { }
 
   ngOnInit(): void {
     this.loadStudenti();
@@ -57,59 +61,45 @@ export class Elencostudenti implements OnInit, AfterViewInit {
   }
 
   loadStudenti(): void {
-    const savedStudenti = localStorage.getItem('studenti');
-    if (savedStudenti) {
-      this.dataSource.data = JSON.parse(savedStudenti);
-    } else {
-      const defaultStudenti: Studente[] = [
-        {
-          id: 1,
-          nome: 'Luca',
-          cognome: 'Marinelli',
-          email: 'luca.marinelli@example.com',
-          corso: 'Developer - Sviluppatore Software',
-          stato: 'ammesso',
-          visualizzato: false,
-        },
-        {
-          id: 2,
-          nome: 'Anna',
-          cognome: 'Rossi',
-          email: 'anna.rossi@example.com',
-          corso: 'Game Developer',
-          stato: 'non_ammesso',
-          visualizzato: false,
-        },
-        {
-          id: 3,
-          nome: 'Marco',
-          cognome: 'Bianchi',
-          email: 'marco.bianchi@example.com',
-          corso: 'Cyber Security',
-          stato: 'sospeso',
-          visualizzato: false,
-        },
-      ];
-      this.dataSource.data = defaultStudenti;
-      this.saveStudenti();
-    }
-  }
-
-  saveStudenti(): void {
-    localStorage.setItem('studenti', JSON.stringify(this.dataSource.data));
+    this.apiService.getStudenti().subscribe({
+      next: (studenti) => {
+        console.log('Studenti caricati dal backend:', studenti);
+        this.dataSource.data = studenti;
+      },
+      error: (errore) => {
+        console.error('Errore nel caricamento studenti:', errore);
+        alert('Errore nel caricamento degli studenti dal server!');
+      }
+    });
   }
 
   marcaVisualizzato(id: number): void {
     const studente = this.dataSource.data.find(s => s.id === id);
     if (studente) {
       studente.visualizzato = !studente.visualizzato;
-      this.saveStudenti();
+      
+      // Aggiorna sul backend
+      const studenteId = String(id);
+      this.apiService.aggiornaStudente(studenteId, studente).subscribe({
+        next: () => console.log('Studente aggiornato'),
+        error: (err) => console.error('Errore aggiornamento:', err)
+      });
     }
   }
 
   rimuoviIscrizione(id: number): void {
-    this.dataSource.data = this.dataSource.data.filter(s => s.id !== id);
-    this.saveStudenti();
+    const studenteId = String(id);
+    
+    this.apiService.eliminaStudente(studenteId).subscribe({
+      next: () => {
+        console.log('Studente eliminato con successo');
+        this.loadStudenti();
+      },
+      error: (errore) => {
+        console.error('Errore nell\'eliminazione:', errore);
+        alert('Errore nell\'eliminazione dello studente!');
+      }
+    });
   }
 
   aggiungiStudente(): void {
@@ -119,20 +109,27 @@ export class Elencostudenti implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Generate a new ID (simple max + 1 logic for now)
-        const currentData = this.dataSource.data;
-        const newId = currentData.length > 0
-          ? Math.max(...currentData.map(s => s.id)) + 1
-          : 1;
-
-        const newStudent: Studente = {
-          id: newId,
-          ...result
+        // Crea il nuovo studente e invialo al backend
+        const nuovoStudente = {
+          nome: result.nome,
+          cognome: result.cognome,
+          email: result.email,
+          corso: result.corso,
+          stato: result.stato,
+          visualizzato: false
         };
 
-        // Update dataSource
-        this.dataSource.data = [...currentData, newStudent];
-        this.saveStudenti();
+        // CHIAMATA AL BACKEND per creare lo studente
+        this.apiService.creaStudente(nuovoStudente).subscribe({
+          next: (studente) => {
+            console.log('Studente creato:', studente);
+            this.loadStudenti();
+          },
+          error: (errore) => {
+            console.error('Errore nella creazione:', errore);
+            alert('Errore nella creazione dello studente!');
+          }
+        });
       }
     });
   }

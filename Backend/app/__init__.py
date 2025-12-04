@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from pymongo import MongoClient
 from .config import Config
 
@@ -10,29 +11,36 @@ def create_app():
     global db
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
+    # Abilita CORS per permettere richieste da Angular
+    CORS(
+        app,
+        resources={
+            r"/*": {
+                "origins": ["http://localhost:4200"],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+    )
+
     # Connessione a MongoDB
     client = MongoClient(
         host=app.config["MONGODB_SETTINGS"]["host"],
         port=app.config["MONGODB_SETTINGS"]["port"],
     )
     db = client[app.config["MONGODB_SETTINGS"]["db"]]
-    
+
     # Aggancia il database all'app
     app.config["MONGO_DB"] = db
-    
+
     from app.routes import studenti_bp
     from app.routes.modulo import modulo_bp
+
     app.register_blueprint(studenti_bp, url_prefix="/studenti")
     app.register_blueprint(modulo_bp, url_prefix="/moduli")
-    
+
     return app
-
-
-
-
-
-
 
 
 # def create_app():
