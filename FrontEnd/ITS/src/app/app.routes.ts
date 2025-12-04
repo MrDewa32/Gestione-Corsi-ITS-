@@ -17,4 +17,5 @@ export const routes: Routes = [
     { path: 'calendari', component: Calendari, title: 'Calendari' },
     { path: 'listaalunni', component: Listaalunni, title: 'Lista Studenti' },
     { path: 'aggiungistudente', component: Aggiungistudente, title: 'Aggiungi Studente' },
+    { path: 'elencostudenti', component: Elencostudenti, title: 'Elenco Studenti' },
 ];

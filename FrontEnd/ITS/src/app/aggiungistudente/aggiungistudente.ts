@@ -8,6 +8,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ApiService } from '../services/api';
+
 
 
 @Component({
@@ -23,4 +25,8 @@ export class Aggiungistudente{
     numero: "numero",
     email: "email",
   };
+
+  constructor(private apiService: ApiService) { 
+    
+  }
 }
