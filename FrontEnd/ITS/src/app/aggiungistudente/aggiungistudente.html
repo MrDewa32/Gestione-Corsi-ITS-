@@ -6,23 +6,23 @@
     <mat-card-content>
       <form class="student-form">
         <mat-form-field class="full-width">
-          <mat-label>Nome</mat-label>
+          <mat-label>{{studente.nome}}</mat-label>
           <input matInput id="nome">
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Cognome</mat-label>
+          <mat-label>{{studente.cognome}}</mat-label>
           <input matInput id="cognome">
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Numero</mat-label>
+          <mat-label>{{studente.numero}}</mat-label>
           <input matInput type="tel" id="numero">
           <mat-error>Input non valido!</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Email</mat-label>
+          <mat-label>{{studente.email}}</mat-label>
           <input matInput type="email" id="email">
         </mat-form-field>
       </form>
