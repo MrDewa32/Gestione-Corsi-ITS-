@@ -17,5 +17,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './aggiungistudente.css',
 })
 export class Aggiungistudente{
-
+  studente = {
+    nome: "nome",
+    cognome: "cognome",
+    numero: "numero",
+    email: "email",
+  };
 }
