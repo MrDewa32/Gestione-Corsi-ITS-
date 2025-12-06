@@ -29,6 +29,12 @@
 
   <div class="table-wrapper">
     <table mat-table [dataSource]="dataSource" matSort class="studenti-table">
+      <!-- Matricola Column -->
+      <ng-container matColumnDef="matricola">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Matricola</th>
+        <td mat-cell *matCellDef="let element">{{ element.matricola }}</td>
+      </ng-container>
+
       <!-- Nome Column -->
       <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
@@ -76,6 +82,10 @@
           <button mat-icon-button (click)="rimuoviIscrizione(element._id)" matTooltip="Rimuovi iscrizione"
             class="btn-action btn-rimuovi">
             <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button [routerLink]="['/dettaglistudente', element._id]" matTooltip="Dettagli"
+            class="btn-action btn-dettagli">
+            <mat-icon>info</mat-icon>
           </button>
         </td>
       </ng-container>
