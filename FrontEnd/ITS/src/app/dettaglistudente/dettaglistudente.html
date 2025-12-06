@@ -36,11 +36,22 @@
           </div>
         </div>
       </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="modificaCredenziali()">
+          <mat-icon>edit</mat-icon> Modifica Credenziali
+        </button>
+      </mat-card-actions>
     </mat-card>
 
     <!-- Exams Section -->
     <div class="exams-section">
-      <h2>Esami Sostenuti</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="margin: 0;">Esami Sostenuti</h2>
+        <button mat-stroked-button color="primary" (click)="gestisciEsami()">
+          <mat-icon>edit_note</mat-icon>
+          Gestisci Esami
+        </button>
+      </div>
       <mat-card class="exams-card">
         <mat-list>
           <ng-container *ngFor="let esame of studente.esami; let last = last">

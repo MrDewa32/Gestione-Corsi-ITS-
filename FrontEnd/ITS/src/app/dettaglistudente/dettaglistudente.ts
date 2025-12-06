@@ -80,4 +80,14 @@ export class Dettaglistudente implements OnInit {
   goBack(): void {
     window.history.back();
   }
+
+  modificaCredenziali(): void {
+    console.log('Modifica credenziali click');
+    // TODO: Implement dialog to modify credentials
+  }
+
+  gestisciEsami(): void {
+    console.log('Gestisci esami click');
+    // TODO: Implement dialog to manage exams
+  }
 }
