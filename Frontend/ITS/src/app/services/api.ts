@@ -15,8 +15,8 @@ export class ApiService {
     return this.http.get<any[]>(`${this.apiUrl}/studenti/`);
   }
 
-  getStudentiByID(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/studenti/${id}`);
+  getStudentiByID(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/studenti/${id}`);
   }
 
   creaStudente(studente: any): Observable<any> {

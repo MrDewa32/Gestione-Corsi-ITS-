@@ -16,7 +16,7 @@ import { ApiService } from '../services/api';
 export interface Studente {
   _id?: string;  // ID di MongoDB (opzionale per nuovi studenti)
   id?: number;   // Manteniamo per compatibilità
-  matricola: string; // Add matricola
+  matricola?: string; // Opzionale
   nome: string;
   cognome: string;
   email: string;
@@ -67,11 +67,10 @@ export class Elencostudenti implements OnInit, AfterViewInit {
   loadStudenti(): void {
     this.apiService.getStudenti().subscribe({
       next: (studenti) => {
-        console.log('Studenti caricati dal backend:', studenti);
         this.dataSource.data = studenti;
       },
       error: (errore) => {
-        console.error('Errore nel caricamento studenti:', errore);
+        console.error('❌ Errore nel caricamento studenti:', errore);
         alert('Errore nel caricamento degli studenti dal server!');
       }
     });

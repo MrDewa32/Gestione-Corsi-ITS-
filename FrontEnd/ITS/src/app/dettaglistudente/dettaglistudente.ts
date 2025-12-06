@@ -10,14 +10,27 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ApiService } from '../services/api';
 import { Studente } from '../elencostudenti/elencostudenti';
 
-interface Esame {
-  materia: string;
-  voto: number;
-  data: string;
+// Struttura del modulo dentro un esame
+interface Modulo {
+  codice: string;
+  nome: string;
+  ore: number;
+  descrizione: string;
 }
 
+// Struttura di un esame (come arriva dal backend)
+interface Esame {
+  data: string;
+  voto: number;
+  note: string;
+  modulo: Modulo;  // Il modulo è un oggetto annidato
+}
+
+// Studente completo con tutti i campi del backend
 interface StudenteDettaglio extends Studente {
-  esami?: Esame[];
+  matricola?: string;           // Campo che aggiungerai
+  moduliIscritti?: string[];    // Array di codici modulo
+  esami?: Esame[];              // Array di esami
 }
 
 @Component({
@@ -49,29 +62,21 @@ export class Dettaglistudente implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadStudente(id);
+    } else {
+      console.error('❌ Nessun ID trovato nella route!');
+      this.loading = false;
     }
   }
 
   loadStudente(id: string): void {
     this.apiService.getStudentiByID(id).subscribe({
       next: (data: any) => {
-        // Handle case where API might return array or object
-        this.studente = Array.isArray(data) ? data[0] : data;
-        
-        // Mock exams if not present (to satisfy requirements if backend returns empty)
-        if (this.studente && !this.studente.esami) {
-          this.studente.esami = [
-            { materia: 'Programmazione Java', voto: 28, data: '2025-01-15' },
-            { materia: 'Database SQL', voto: 30, data: '2025-02-20' },
-            { materia: 'Inglese Tecnico', voto: 26, data: '2025-03-10' },
-            { materia: 'Sviluppo Web', voto: 29, data: '2025-04-05' }
-          ];
-        }
-        
+        this.studente = data;
         this.loading = false;
+        console.log('✅ Dettagli studente caricati');
       },
       error: (err) => {
-        console.error('Errore caricamento dettagli:', err);
+        console.error('❌ Errore caricamento dettagli:', err);
         this.loading = false;
       }
     });
