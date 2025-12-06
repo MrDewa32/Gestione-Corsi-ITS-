@@ -2,6 +2,15 @@
 <mat-dialog-content>
     <form [formGroup]="studentForm" class="student-form">
         <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Matricola</mat-label>
+            <input matInput formControlName="matricola" placeholder="Inserisci matricola">
+            <mat-error *ngIf="studentForm.get('matricola')?.hasError('required')">
+                La matricola è obbligatoria
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>Nome</mat-label>
             <input matInput formControlName="nome" placeholder="Inserisci nome">
             <mat-error *ngIf="studentForm.get('nome')?.hasError('required')">

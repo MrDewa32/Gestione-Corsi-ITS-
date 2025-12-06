@@ -41,6 +41,7 @@ export class AggiungiStudenteDialog {
     private dialogRef: MatDialogRef<AggiungiStudenteDialog>
   ) {
     this.studentForm = this.fb.group({
+      matricola: ['', Validators.required],
       nome: ['', Validators.required],
       cognome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

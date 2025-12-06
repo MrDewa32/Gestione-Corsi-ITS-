@@ -15,6 +15,7 @@ import { ApiService } from '../services/api';
 export interface Studente {
   _id?: string;  // ID di MongoDB (opzionale per nuovi studenti)
   id?: number;   // Manteniamo per compatibilità
+  matricola: string; // Add matricola
   nome: string;
   cognome: string;
   email: string;
@@ -42,7 +43,7 @@ export interface Studente {
   styleUrls: ['./elencostudenti.css'],
 })
 export class Elencostudenti implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['nome', 'cognome', 'email', 'corso', 'stato', 'azioni'];
+  displayedColumns: string[] = ['matricola', 'nome', 'cognome', 'email', 'corso', 'stato', 'azioni'];
   dataSource = new MatTableDataSource<Studente>([]);
   showFilter = false;
 
@@ -109,6 +110,7 @@ export class Elencostudenti implements OnInit, AfterViewInit {
       if (result) {
         // Crea il nuovo studente e invialo al backend
         const nuovoStudente = {
+          matricola: result.matricola,
           nome: result.nome,
           cognome: result.cognome,
           email: result.email,
