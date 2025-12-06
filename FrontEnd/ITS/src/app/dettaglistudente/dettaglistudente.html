@@ -18,7 +18,8 @@
           <mat-icon>person</mat-icon>
         </div>
         <mat-card-title>{{ studente.nome }} {{ studente.cognome }}</mat-card-title>
-        <mat-card-subtitle>Matricola: {{ studente.matricola }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="studente.matricola">Matricola: {{ studente.matricola }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="!studente.matricola">ID: {{ studente._id }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="info-grid">
@@ -26,13 +27,19 @@
             <span class="label">Email</span>
             <span class="value">{{ studente.email }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="studente.corso">
             <span class="label">Corso</span>
             <span class="value">{{ studente.corso }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="studente.stato">
             <span class="label">Stato</span>
             <span class="chip" [ngClass]="studente.stato">{{ studente.stato.replace('_', ' ') }}</span>
+          </div>
+          
+          <!-- Moduli Iscritti -->
+          <div class="info-item full-width" *ngIf="studente.moduliIscritti && studente.moduliIscritti.length > 0">
+            <span class="label">Moduli Iscritti</span>
+            <span class="value">{{ studente.moduliIscritti.join(', ') }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -57,8 +64,11 @@
           <ng-container *ngFor="let esame of studente.esami; let last = last">
             <mat-list-item>
               <mat-icon matListItemIcon>school</mat-icon>
-              <span matListItemTitle>{{ esame.materia }}</span>
-              <span matListItemLine>{{ esame.data | date:'dd/MM/yyyy' }}</span>
+              <span matListItemTitle>{{ esame.modulo?.nome || 'N/A' }} ({{ esame.modulo?.codice || 'N/A' }})</span>
+              <span matListItemLine>
+                {{ esame.data | date:'dd/MM/yyyy' }}
+                <span *ngIf="esame.note"> - {{ esame.note }}</span>
+              </span>
               <span class="voto-badge" [class.high-grade]="esame.voto >= 27">
                 {{ esame.voto }}/30
               </span>
