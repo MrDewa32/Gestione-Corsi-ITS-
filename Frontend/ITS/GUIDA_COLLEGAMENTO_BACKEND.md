@@ -3,9 +3,46 @@
 ## 🎯 Obiettivo
 Collegare il backend Flask (che gestisce i dati su MongoDB) con il frontend Angular, sostituendo l'uso di `localStorage` con chiamate HTTP al server.
 
----
 
 ## 🔧 Modifiche Apportate
+
+---
+
+## 🛠️ Problema riscontrato: Change Detection Angular (pagina dettagli studente)
+
+### Sintomo
+- La pagina "dettagli studente" rimaneva bianca o in caricamento infinito, anche se i dati venivano ricevuti correttamente dal backend.
+
+### Analisi
+- La chiamata HTTP tramite `this.apiService.getStudentiByID(id)` riceveva i dati, ma Angular non aggiornava la vista.
+- Questo succede perché le operazioni asincrone (come le chiamate HTTP) possono avvenire fuori dal ciclo di rilevamento dei cambiamenti di Angular.
+- Di conseguenza, anche se la variabile `studente` veniva aggiornata, la pagina non si "accorgeva" del cambiamento.
+
+### Soluzione
+1. Importare `ChangeDetectorRef` da `@angular/core`:
+  ```typescript
+  import { ChangeDetectorRef } from '@angular/core';
+  ```
+2. Iniettare `ChangeDetectorRef` nel costruttore del componente:
+  ```typescript
+  constructor(private cdr: ChangeDetectorRef) {}
+  ```
+3. Dopo aver aggiornato i dati nella subscribe, chiamare `this.cdr.detectChanges();`:
+  ```typescript
+  this.apiService.getStudentiByID(id).subscribe({
+    next: (data) => {
+     this.studente = data;
+     this.loading = false;
+     this.cdr.detectChanges(); // Forza l'aggiornamento della vista
+    }
+  });
+  ```
+
+### Risultato
+- Angular aggiorna immediatamente la vista e mostra i dati ricevuti.
+- Problema risolto senza workaround o hack.
+
+---
 
 ### 1️⃣ **Servizio API (`src/app/services/api.ts`)**
 

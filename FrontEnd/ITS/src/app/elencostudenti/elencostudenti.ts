@@ -70,7 +70,7 @@ export class Elencostudenti implements OnInit, AfterViewInit {
         this.dataSource.data = studenti;
       },
       error: (errore) => {
-        console.error('❌ Errore nel caricamento studenti:', errore);
+        console.error('Errore nel caricamento studenti:', errore);
         alert('Errore nel caricamento degli studenti dal server!');
       }
     });

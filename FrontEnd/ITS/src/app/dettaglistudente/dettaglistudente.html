@@ -6,8 +6,6 @@
     <h1 class="page-title">Dettagli Studente</h1>
   </div>
 
-  
-
   <div *ngIf="!loading && studente" class="content-wrapper">
     <!-- Student Info Card -->
     <mat-card class="student-card">
@@ -62,7 +60,7 @@
           <ng-container *ngFor="let esame of studente.esami; let last = last">
             <mat-list-item>
               <mat-icon matListItemIcon>school</mat-icon>
-              <span matListItemTitle>{{ esame.modulo?.nome || 'N/A' }} ({{ esame.modulo?.codice || 'N/A' }})</span>
+              <span matListItemTitle>{{ esame.modulo.nome || 'N/A' }} ({{ esame.modulo.codice || 'N/A' }})</span>
               <span matListItemLine>
                 {{ esame.data | date:'dd/MM/yyyy' }}
                 <span *ngIf="esame.note"> - {{ esame.note }}</span>

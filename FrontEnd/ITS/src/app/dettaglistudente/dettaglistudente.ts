@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -55,7 +55,8 @@ export class Dettaglistudente implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -73,11 +74,12 @@ export class Dettaglistudente implements OnInit {
       next: (data: any) => {
         this.studente = data;
         this.loading = false;
-        console.log('✅ Dettagli studente caricati');
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('❌ Errore caricamento dettagli:', err);
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
