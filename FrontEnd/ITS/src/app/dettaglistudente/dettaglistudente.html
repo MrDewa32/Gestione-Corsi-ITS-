@@ -15,7 +15,7 @@
         </div>
         <mat-card-title>{{ studente.nome }} {{ studente.cognome }}</mat-card-title>
         <mat-card-subtitle *ngIf="studente.matricola">Matricola: {{ studente.matricola }}</mat-card-subtitle>
-        <mat-card-subtitle *ngIf="!studente.matricola">ID: {{ studente._id }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="!studente.matricola">Matricola: {{ studente.matricola }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="info-grid">

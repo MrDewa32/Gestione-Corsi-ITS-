@@ -1,25 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Card } from '../card/card';
+import { ApiService } from '../services/api';
+
+// Interfaccia Modulo (come nel backend)
+export interface Modulo {
+  _id?: string;
+  codice: string;
+  nome: string;
+  ore: number;
+  descrizione: string;
+  studentiIscritti?: string[];
+}
 
 @Component({
   selector: 'app-corso',
   standalone: true,
-  imports: [CommonModule, Card],
+  imports: [
+    CommonModule,
+    Card,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './corso.html',
   styleUrl: './corso.css',
 })
-export class Corso {
-  dati = [
-    {titolo: "titolo1", descrizione: "descrizione1", badge: 1},
-    {titolo: "titolo2", descrizione: "descrizione2", badge: 2},
-    {titolo: "titolo3", descrizione: "descrizione3", badge: 3},
-    {titolo: "titolo4", descrizione: "descrizione4", badge: 4},
-    {titolo: "titolo5", descrizione: "descrizione5", badge: 5},
-    {titolo: "titolo6", descrizione: "descrizione6", badge: 6},
-    {titolo: "titolo7", descrizione: "descrizione7", badge: 0},
-    {titolo: "titolo8", descrizione: "descrizione8", badge: 0},
-    {titolo: "titolo9", descrizione: "descrizione9", badge: 0},
-    {titolo: "titolo10", descrizione: "descrizione10", badge: 0},
-  ];
+export class Corso implements OnInit {
+  moduli: Modulo[] = [];
+  loading = true;
+
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadModuli();
+  }
+
+  loadModuli(): void {
+    console.log('🔍 Inizio caricamento moduli...');
+    this.apiService.getModuli().subscribe({
+      next: (data: any) => {
+        console.log('✅ Moduli ricevuti:', data);
+        // Il backend restituisce {moduli: [...]} quindi estraiamo l'array
+        this.moduli = data.moduli || data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('❌ Errore caricamento moduli:', err);
+        alert('Errore nel caricamento dei moduli dal server!');
+        this.loading = false;
+      }
+    });
+  }
+
+  visualizzaDettaglio(moduloId: string): void {
+    this.router.navigate(['/modulo', moduloId]);
+  }
 }

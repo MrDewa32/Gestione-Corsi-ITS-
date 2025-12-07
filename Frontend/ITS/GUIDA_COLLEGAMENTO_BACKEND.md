@@ -80,6 +80,27 @@ export class ApiService {
   aggiornaStudente(id: string, studente: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/studenti/${id}`, studente);
   }
+
+  // Metodi per gestire i moduli
+  getModuli(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/moduli/`);
+  }
+
+  getModuloByID(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/moduli/${id}`);
+  }
+
+  creaModulo(modulo: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/moduli/`, modulo);
+  }
+
+  eliminaModulo(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/moduli/${id}`);
+  }
+
+  aggiornaModulo(id: string, modulo: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/moduli/${id}`, modulo);
+  }
 }
 ```
 
@@ -564,6 +585,129 @@ gestisciEsami(): void {
 
 ---
 
+## 🏫 Nuova Funzionalità: Gestione Moduli
+
+### **Componente Corso trasformato per Gestione Moduli**
+
+#### 1. **Interfaccia Modulo**
+```typescript
+export interface Modulo {
+  _id?: string;
+  codice: string;
+  nome: string;
+  ore: number;
+  descrizione: string;
+  studentiIscritti?: string[];
+}
+```
+
+#### 2. **Componente Corso (`corso.ts`)**
+Trasformato da componente statico con dati hardcoded a componente dinamico con caricamento dal backend:
+
+**Prima (dati statici):**
+```typescript
+export class Corso {
+  dati = [
+    {titolo: "titolo1", descrizione: "descrizione1", badge: 1},
+    // ... dati hardcoded
+  ];
+}
+```
+
+**Dopo (backend integration):**
+```typescript
+export class Corso implements OnInit {
+  moduli: Modulo[] = [];
+  loading = true;
+
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadModuli();
+  }
+
+  loadModuli(): void {
+    this.apiService.getModuli().subscribe({
+      next: (data: any) => {
+        // Backend restituisce {moduli: [...]}
+        this.moduli = data.moduli || data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Errore caricamento moduli:', err);
+        alert('Errore nel caricamento dei moduli dal server!');
+        this.loading = false;
+      }
+    });
+  }
+
+  visualizzaDettaglio(moduloId: string): void {
+    this.router.navigate(['/modulo', moduloId]);
+  }
+}
+```
+
+#### 3. **Template HTML (`corso.html`)**
+```html
+<div class="moduli-container">
+  <div class="header">
+    <h1>Gestione Moduli</h1>
+    <button mat-raised-button color="primary">
+      <mat-icon>add</mat-icon>
+      Aggiungi Modulo
+    </button>
+  </div>
+
+  <div class="card-container">
+    <app-card 
+      *ngFor="let modulo of moduli"
+      [titolo]="modulo.nome"
+      [descrizione]="modulo.descrizione"
+      [badge]="modulo.studentiIscritti?.length || 0"
+      (click)="visualizzaDettaglio(modulo._id!)"
+    />
+  </div>
+
+  <div *ngIf="moduli.length === 0" class="empty-state">
+    <mat-icon>school</mat-icon>
+    <p>Nessun modulo disponibile</p>
+  </div>
+</div>
+```
+
+#### 4. **Caratteristiche**
+- ✅ Carica moduli dal backend tramite `ApiService.getModuli()`
+- ✅ Visualizza ogni modulo come card riutilizzando il componente `Card` esistente
+- ✅ Badge mostra il numero di studenti iscritti
+- ✅ Click sulla card naviga ai dettagli del modulo
+- ✅ Bottone "Aggiungi Modulo" per creare nuovi moduli
+- ✅ Empty state se non ci sono moduli
+- ✅ Hover effect sulle card
+
+#### 5. **Problema Risolto: Formato Risposta Backend**
+**Sintomo:** Errore `NG0900: Error trying to diff '[object Object]'`
+
+**Causa:** Il backend Flask restituisce `{moduli: Array(6)}` invece di `Array(6)`
+
+**Soluzione:** Estrarre l'array dalla proprietà `moduli`:
+```typescript
+this.moduli = data.moduli || data;
+```
+
+#### 6. **Route Backend**
+- `GET /moduli/` - Lista tutti i moduli
+- `GET /moduli/{id}` - Dettagli modulo specifico
+- `POST /moduli/` - Crea nuovo modulo
+- `PUT /moduli/{id}` - Aggiorna modulo
+- `DELETE /moduli/{id}` - Elimina modulo
+
+**Nota importante:** L'URL è `/moduli/` (plurale) non `/modulo/` come registrato nel blueprint Flask.
+
+---
+
 ## 📚 Concetti Chiave Imparati
 
 ### **1. Observable**
@@ -595,13 +739,22 @@ Sistema di Angular Material per creare popup/modal. Si usa `dialog.open(Componen
 ### **7. Standalone Components**
 In Angular 18+, i componenti possono essere `standalone: true` e dichiarare i propri imports senza bisogno di NgModule.
 
+### **8. Riutilizzo Componenti**
+Il componente `Card` è stato riutilizzato sia per visualizzare corsi che moduli, cambiando solo i dati passati come input.
+
+### **9. Formato Risposta Backend**
+Alcuni endpoint Flask possono restituire oggetti wrapper (es. `{moduli: [...]}`) invece di array diretti. Importante estrarre i dati correttamente: `data.moduli || data`.
+
 ---
 
 ## 🎯 Funzionalità Implementate dalla Traccia
 
 ✅ **1. Gestione dei Moduli**
-- CRUD completo moduli (backend pronto, frontend da implementare)
-- Route API disponibili in `ApiService`
+- ✅ Visualizzazione elenco moduli con card
+- ✅ Numero studenti iscritti su ogni card (badge)
+- ✅ CRUD completo moduli (API backend pronte)
+- ✅ Navigazione a dettagli modulo (da implementare componente dettaglio)
+- ✅ Route API disponibili in `ApiService`
 
 ✅ **2. Gestione degli Studenti**
 - Registrazione nuovi studenti con form
@@ -623,14 +776,15 @@ In Angular 18+, i componenti possono essere `standalone: true` e dichiarare i pr
 
 ## 🎯 Prossimi Passi
 
-1. **Implementare frontend per Moduli**: Creare componenti per gestione moduli (già disponibili metodi API)
-2. **Aggiungere autenticazione**: Proteggere le API con token JWT
-3. **Gestione errori migliorata**: Toast notifications invece di alert()
-4. **Loading spinners**: Indicare quando i dati sono in caricamento
-5. **Validazione form avanzata**: Reactive Forms con validatori custom
-6. **Paginazione**: Gestire grandi quantità di studenti
-7. **Filtri e ricerca**: Filtrare studenti per corso, stato, etc.
-8. **Grafici statistiche**: Visualizzare performance con chart.js o ngx-charts
+1. **Componente Dettaglio Modulo**: Visualizzare dettagli modulo con elenco studenti iscritti
+2. **Dialog Aggiungi/Modifica Modulo**: Form per creare e modificare moduli
+3. **Iscrizione studenti a moduli**: Implementare funzionalità per aggiungere/rimuovere studenti da moduli
+4. **Aggiungere autenticazione**: Proteggere le API con token JWT
+5. **Gestione errori migliorata**: Toast notifications invece di alert()
+6. **Validazione form avanzata**: Reactive Forms con validatori custom
+7. **Paginazione**: Gestire grandi quantità di studenti/moduli
+8. **Filtri e ricerca**: Filtrare studenti per corso, stato, etc.
+9. **Grafici statistiche**: Visualizzare performance con chart.js o ngx-charts
 
 ---
 
@@ -653,6 +807,9 @@ Ora il tuo frontend Angular è completamente connesso al backend Flask! I dati s
 - ✅ Dialog per aggiungere esami
 - ✅ Gestione Change Detection Angular
 - ✅ Standalone Components con Material Design
+- ✅ Visualizzazione elenco moduli con card riutilizzabili
+- ✅ API complete per gestione moduli (backend + frontend)
+- ✅ Conteggio studenti iscritti per modulo
 
 ---
 

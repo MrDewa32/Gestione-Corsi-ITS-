@@ -1,8 +1,24 @@
-<div class="card-container">
+<div class="moduli-container">
+  <div class="header">
+    <h1>Gestione Moduli</h1>
+    <button mat-raised-button color="primary">
+      <mat-icon>add</mat-icon>
+      Aggiungi Modulo
+    </button>
+  </div>
+
+  <div class="card-container">
     <app-card 
-        *ngFor="let dato of dati"
-        [titolo]="dato.titolo"
-        [descrizione]="dato.descrizione"
-        [badge]="dato.badge"
+      *ngFor="let modulo of moduli"
+      [titolo]="modulo.nome"
+      [descrizione]="modulo.descrizione"
+      [badge]="modulo.studentiIscritti?.length || 0"
+      (click)="visualizzaDettaglio(modulo._id!)"
     />
+  </div>
+
+  <div *ngIf="moduli.length === 0" class="empty-state">
+    <mat-icon>school</mat-icon>
+    <p>Nessun modulo disponibile</p>
+  </div>
 </div>

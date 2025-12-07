@@ -41,24 +41,24 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/studenti/voti-alti/${id}`);
   }
 
-  // Metodi per gestire i moduli da testare
+  // Metodi per gestire i moduli
   getModuli(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/modulo/`);
+    return this.http.get<any[]>(`${this.apiUrl}/moduli/`);
   }
 
   getModuloByID(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/modulo/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/moduli/${id}`);
   }
 
   creaModulo(modulo: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/modulo/`, modulo);
+    return this.http.post(`${this.apiUrl}/moduli/`, modulo);
   }
 
   eliminaModulo(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/modulo/${id}`);
+    return this.http.delete(`${this.apiUrl}/moduli/${id}`);
   }
 
   aggiornaModulo(id: string, modulo: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/modulo/${id}`, modulo);
+    return this.http.put(`${this.apiUrl}/moduli/${id}`, modulo);
   }
 }
