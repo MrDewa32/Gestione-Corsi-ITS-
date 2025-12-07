@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Aggiungi Esame</h2>
+<mat-dialog-content>
+  <form #esameForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Modulo</mat-label>
+      <input matInput name="modulo" [(ngModel)]="data.modulo" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Data</mat-label>
+      <input matInput type="date" name="data" [(ngModel)]="data.data" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Voto</mat-label>
+      <input matInput type="number" name="voto" [(ngModel)]="data.voto" min="18" max="30" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Note</mat-label>
+      <input matInput name="note" [(ngModel)]="data.note">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annulla</button>
+  <button mat-button color="primary" [mat-dialog-close]="data" [disabled]="!esameForm.form.valid">Aggiungi</button>
+</mat-dialog-actions>

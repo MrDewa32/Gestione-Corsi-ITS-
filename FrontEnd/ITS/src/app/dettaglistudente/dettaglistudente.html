@@ -46,13 +46,52 @@
       </mat-card-actions>
     </mat-card>
 
+    <!-- Statistics Section -->
+    <div class="statistics-section">
+      <div style="display: flex; gap: 16px;">
+        <!-- Media Voti Card -->
+        <mat-card class="stat-card" style="flex: 1;">
+          <mat-card-header>
+            <mat-icon mat-card-avatar style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center;">trending_up</mat-icon>
+            <mat-card-title>Media Voti</mat-card-title>
+            <mat-card-subtitle>Performance complessiva</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content style="text-align: center; padding: 20px;">
+            <div *ngIf="mediaVoti !== null" style="font-size: 48px; font-weight: bold; color: #4caf50;">
+              {{ mediaVoti }}
+            </div>
+            <div *ngIf="mediaVoti === null" style="font-size: 16px; color: #999;">
+              Nessun voto disponibile
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Voti Alti Card -->
+        <mat-card class="stat-card" style="flex: 1;">
+          <mat-card-header>
+            <mat-icon mat-card-avatar style="background: #ff9800; color: white; display: flex; align-items: center; justify-content: center;">star</mat-icon>
+            <mat-card-title>Voti Alti (≥24)</mat-card-title>
+            <mat-card-subtitle>Esami eccellenti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content style="padding: 20px;">
+            <div *ngIf="votiAlti && votiAlti.length > 0" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+              <span *ngFor="let voto of votiAlti" class="voto-badge high-grade">{{ voto }}</span>
+            </div>
+            <div *ngIf="!votiAlti || votiAlti.length === 0" style="text-align: center; font-size: 16px; color: #999;">
+              Nessun voto ≥24
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
     <!-- Exams Section -->
     <div class="exams-section">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <h2 style="margin: 0;">Esami Sostenuti</h2>
         <button mat-stroked-button color="primary" (click)="gestisciEsami()">
           <mat-icon>edit_note</mat-icon>
-          Gestisci Esami
+          Aggiungi Esami
         </button>
       </div>
       <mat-card class="exams-card">

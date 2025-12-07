@@ -132,3 +132,22 @@
   color: #757575;
   font-style: italic;
 }
+
+/* Statistics Section */
+.statistics-section {
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stat-card .mat-mdc-card-header {
+  padding: 16px;
+}
+
+.stat-card mat-icon[mat-card-avatar] {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

@@ -404,6 +404,166 @@ this.apiService.creaStudente(data).subscribe({
 
 ---
 
+## 📊 Nuova Funzionalità: Visualizzazione Statistiche Studente
+
+### **Requisito dalla Traccia**
+La traccia richiedeva:
+- **Calcolo della media voti per studente**: il sistema fornisce una panoramica immediata delle performance.
+- **Individuare rapidamente gli esami in cui lo studente ha ottenuto un voto pari o superiore a 24**, utile per analisi e report.
+
+### **Implementazione**
+
+#### 1. **Nuovi Metodi in ApiService**
+```typescript
+// Metodi per statistiche studenti
+getMediaStudente(id: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/studenti/media/${id}`);
+}
+
+getVotiAltiStudente(id: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/studenti/voti-alti/${id}`);
+}
+```
+
+#### 2. **Modifiche al Componente DettagliStudente**
+Aggiunte due nuove proprietà:
+```typescript
+mediaVoti: number | null = null;
+votiAlti: number[] = [];
+```
+
+Nuovo metodo per caricare le statistiche:
+```typescript
+loadStatistiche(id: string): void {
+  // Carica media voti
+  this.apiService.getMediaStudente(id).subscribe({
+    next: (data: any) => {
+      this.mediaVoti = data.voti;
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error('Errore caricamento media:', err)
+  });
+
+  // Carica voti alti
+  this.apiService.getVotiAltiStudente(id).subscribe({
+    next: (data: any) => {
+      this.votiAlti = data.voti;
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error('Errore caricamento voti alti:', err)
+  });
+}
+```
+
+#### 3. **Interfaccia Utente**
+Aggiunta una nuova sezione "Statistics" con due card affiancate:
+
+**Card Media Voti:**
+- Icona trending_up verde
+- Visualizza la media in grande (font-size 48px)
+- Messaggio "Nessun voto disponibile" se non ci sono esami
+
+**Card Voti Alti:**
+- Icona star arancione
+- Mostra tutti i voti ≥24 come badge
+- Messaggio "Nessun voto ≥24" se non ce ne sono
+
+#### 4. **Route Backend Utilizzate**
+- `GET /studenti/media/{studente_id}` - Restituisce `{ nome, cognome, voti: media }`
+- `GET /studenti/voti-alti/{studente_id}` - Restituisce `{ nome, cognome, voti: [array] }`
+
+### **Risultato**
+La pagina dettaglio studente ora mostra:
+1. Informazioni personali studente
+2. **Statistiche (NUOVO)**: Media voti e voti alti in card visuali
+3. Lista completa esami sostenuti
+4. Possibilità di aggiungere nuovi esami tramite dialog
+
+---
+
+## 🎨 Nuova Funzionalità: Dialog Aggiungi Esame
+
+### **Implementazione**
+
+#### 1. **Nuovo Componente Dialog (`aggiungiesame-dialog.ts`)**
+```typescript
+@Component({
+  selector: 'app-aggiungiesame-dialog',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
+  templateUrl: './aggiungiesame-dialog.html',
+})
+export class AggiungiEsameDialogComponent {
+  data = {
+    modulo: '',
+    data: '',
+    voto: null,
+    note: ''
+  };
+}
+```
+
+#### 2. **Template del Dialog**
+Form con 4 campi:
+- **Modulo** (text, required)
+- **Data** (date, required)
+- **Voto** (number, min=18, max=30, required)
+- **Note** (text, optional)
+
+Due bottoni:
+- **Annulla**: chiude il dialog senza salvare
+- **Aggiungi**: salva l'esame (disabilitato se form non valido)
+
+#### 3. **Integrazione in DettagliStudente**
+```typescript
+gestisciEsami(): void {
+  const dialogRef = this.dialog.open(AggiungiEsameDialogComponent, {
+    width: '400px',
+    data: {}
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result && this.studente && this.studente._id) {
+      const nuovoEsame = {
+        data: result.data,
+        voto: result.voto,
+        note: result.note,
+        modulo: { nome: result.modulo, codice: '', ore: 0, descrizione: '' }
+      };
+      
+      const esamiAggiornati = this.studente.esami ? 
+        [...this.studente.esami, nuovoEsame] : [nuovoEsame];
+      const studenteId = this.studente._id;
+      
+      this.apiService.aggiornaStudente(studenteId, {
+        ...this.studente,
+        esami: esamiAggiornati
+      }).subscribe({
+        next: () => this.loadStudente(studenteId),
+        error: (err) => alert('Errore durante l\'aggiunta dell\'esame')
+      });
+    }
+  });
+}
+```
+
+### **Flusso Utente**
+1. Click su "Aggiungi Esami"
+2. Si apre popup con form
+3. Compila campi obbligatori (modulo, data, voto)
+4. Click "Aggiungi" → esame salvato su backend
+5. Lista esami si aggiorna automaticamente
+6. Statistiche si aggiornano dopo il reload
+
+---
+
 ## 📚 Concetti Chiave Imparati
 
 ### **1. Observable**
@@ -429,16 +589,48 @@ observable.subscribe({
 });
 ```
 
+### **6. MatDialog**
+Sistema di Angular Material per creare popup/modal. Si usa `dialog.open(ComponenteDialog)` e si gestisce la chiusura con `afterClosed().subscribe()`.
+
+### **7. Standalone Components**
+In Angular 18+, i componenti possono essere `standalone: true` e dichiarare i propri imports senza bisogno di NgModule.
+
+---
+
+## 🎯 Funzionalità Implementate dalla Traccia
+
+✅ **1. Gestione dei Moduli**
+- CRUD completo moduli (backend pronto, frontend da implementare)
+- Route API disponibili in `ApiService`
+
+✅ **2. Gestione degli Studenti**
+- Registrazione nuovi studenti con form
+- Visualizzazione elenco con tabella Material
+- Dettagli studente con tutte le informazioni
+- Eliminazione e modifica studenti
+
+✅ **3. Gestione Esami**
+- Tracciamento esami con data, voto, note
+- Storico completo esami per studente
+- **Dialog per aggiungere nuovi esami**
+
+✅ **4. Funzionalità Avanzate**
+- **Calcolo media voti**: visualizzata in card dedicata
+- **Voti alti (≥24)**: visualizzati come badge nella pagina dettagli
+- Aggiornamento automatico dopo ogni operazione
+
 ---
 
 ## 🎯 Prossimi Passi
 
-1. **Aggiungere autenticazione**: Proteggere le API con token JWT
-2. **Gestione errori migliorata**: Mostrare messaggi più user-friendly
-3. **Loading spinners**: Indicare quando i dati sono in caricamento
-4. **Validazione form**: Controllare i dati prima di inviarli
-5. **Paginazione**: Gestire grandi quantità di studenti
-6. **Implementare lo stesso pattern per MODULI/CORSI**
+1. **Implementare frontend per Moduli**: Creare componenti per gestione moduli (già disponibili metodi API)
+2. **Aggiungere autenticazione**: Proteggere le API con token JWT
+3. **Gestione errori migliorata**: Toast notifications invece di alert()
+4. **Loading spinners**: Indicare quando i dati sono in caricamento
+5. **Validazione form avanzata**: Reactive Forms con validatori custom
+6. **Paginazione**: Gestire grandi quantità di studenti
+7. **Filtri e ricerca**: Filtrare studenti per corso, stato, etc.
+8. **Grafici statistiche**: Visualizzare performance con chart.js o ngx-charts
 
 ---
 
@@ -453,8 +645,18 @@ Ora il tuo frontend Angular è completamente connesso al backend Flask! I dati s
 - ✅ Scalabilità
 - ✅ Separazione frontend/backend
 
+**Funzionalità implementate:**
+- ✅ CRUD completo studenti
+- ✅ Visualizzazione dettagli studente
+- ✅ Calcolo e visualizzazione media voti
+- ✅ Visualizzazione voti alti (≥24)
+- ✅ Dialog per aggiungere esami
+- ✅ Gestione Change Detection Angular
+- ✅ Standalone Components con Material Design
+
 ---
 
-📅 **Data documento:** 4 Dicembre 2025  
+📅 **Ultima modifica:** 7 Dicembre 2025  
 👤 **Autore:** GitHub Copilot  
 🔧 **Progetto:** Gestione Corsi ITS
+

@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { ApiService } from '../services/api';
+import { MatDialog } from '@angular/material/dialog';
+import { AggiungiEsameDialogComponent } from './aggiungiesame-dialog';
 import { Studente } from '../elencostudenti/elencostudenti';
 
 // Struttura del modulo dentro un esame
@@ -52,19 +54,23 @@ interface StudenteDettaglio extends Studente {
 export class Dettaglistudente implements OnInit {
   studente: StudenteDettaglio | null = null;
   loading = true;
+  mediaVoti: number | null = null;
+  votiAlti: number[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadStudente(id);
+      this.loadStatistiche(id);
     } else {
-      console.error('❌ Nessun ID trovato nella route!');
+      console.error('Nessun ID trovato nella route!');
       this.loading = false;
     }
   }
@@ -77,10 +83,30 @@ export class Dettaglistudente implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('❌ Errore caricamento dettagli:', err);
+        console.error('Errore caricamento dettagli:', err);
         this.loading = false;
         this.cdr.detectChanges();
       }
+    });
+  }
+
+  loadStatistiche(id: string): void {
+    // Carica media voti
+    this.apiService.getMediaStudente(id).subscribe({
+      next: (data: any) => {
+        this.mediaVoti = data.voti;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Errore caricamento media:', err)
+    });
+
+    // Carica voti alti
+    this.apiService.getVotiAltiStudente(id).subscribe({
+      next: (data: any) => {
+        this.votiAlti = data.voti;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Errore caricamento voti alti:', err)
     });
   }
 
@@ -94,7 +120,37 @@ export class Dettaglistudente implements OnInit {
   }
 
   gestisciEsami(): void {
-    console.log('Gestisci esami click');
-    // TODO: Implement dialog to manage exams
+    const dialogRef = this.dialog.open(AggiungiEsameDialogComponent, {
+      width: '400px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.studente && this.studente._id) {
+        // Crea nuovo esame da result
+        const nuovoEsame = {
+          data: result.data,
+          voto: result.voto,
+          note: result.note,
+          modulo: {
+            nome: result.modulo,
+            codice: '',
+            ore: 0,
+            descrizione: ''
+          }
+        };
+        // Aggiorna array esami localmente
+        const esamiAggiornati = this.studente.esami ? [...this.studente.esami, nuovoEsame] : [nuovoEsame];
+        const studenteId = this.studente._id;
+        // Aggiorna lo studente lato backend
+        this.apiService.aggiornaStudente(studenteId, {
+          ...this.studente,
+          esami: esamiAggiornati
+        }).subscribe({
+          next: () => this.loadStudente(studenteId),
+          error: (err) => alert('Errore durante l\'aggiunta dell\'esame')
+        });
+      }
+    });
   }
 }
