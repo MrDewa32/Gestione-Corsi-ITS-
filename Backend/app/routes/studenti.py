@@ -81,6 +81,70 @@ def delete_studente(studente_id):
 
     return "", 204
 
+
+@studenti_bp.route(
+    "/<string:studente_id>/iscriviti/<string:codice_modulo>", methods=["POST"]
+)
+def iscriviti_modulo(studente_id, codice_modulo):
+    """Iscrivi studente a modulo - aggiornamento bidirezionale"""
+    db = current_app.config["MONGO_DB"]
+
+    try:
+        oid_studente = ObjectId(studente_id)
+    except:
+        return jsonify({"error": "ID studente non valido"}), 400
+
+    # 1. Verifica esistenza studente
+    studente = db.studente.find_one({"_id": oid_studente})
+    if not studente:
+        return jsonify({"error": "Studente non trovato"}), 404
+
+    # 2. Verifica esistenza modulo per codice
+    modulo = db.modulo.find_one({"codice": codice_modulo})
+    if not modulo:
+        return jsonify({"error": "Modulo non trovato"}), 404
+
+    # 3. Verifica se già iscritto
+    moduli_iscritti = studente.get("moduliIscritti", [])
+    if codice_modulo in moduli_iscritti:
+        return jsonify({"message": "Studente già iscritto a questo modulo"}), 200
+
+    # 4. Aggiorna studente: aggiungi modulo a moduliIscritti
+    db.studente.update_one(
+        {"_id": oid_studente},
+        {"$addToSet": {"moduliIscritti": codice_modulo}},  # $addToSet evita duplicati
+    )
+
+    # 5. Aggiorna modulo: aggiungi studente a studentiIscritti
+    db.modulo.update_one(
+        {"codice": codice_modulo},
+        {
+            "$addToSet": {
+                "studentiIscritti": {
+                    "studente_id": studente_id,
+                    "nome": studente.get("nome", ""),
+                    "cognome": studente.get("cognome", ""),
+                }
+            }
+        },
+    )
+
+    return (
+        jsonify(
+            {
+                "message": "Iscrizione completata con successo",
+                "studente": {
+                    "id": studente_id,
+                    "nome": studente.get("nome"),
+                    "cognome": studente.get("cognome"),
+                },
+                "modulo": {"codice": codice_modulo, "nome": modulo.get("nome")},
+            }
+        ),
+        201,
+    )
+
+
 @studenti_bp.route("/media", methods=["GET"])
 def media_studenti():
     """Calcola la media dei voti di ogni studente"""
@@ -93,11 +157,9 @@ def media_studenti():
         voti = [e.get("voto") for e in esami if "voto" in e]
         media = round(sum(voti) / len(voti), 2) if voti else None
 
-        risultato.append({
-            "cognome": s.get("cognome"),
-            "nome": s.get("nome"),
-            "voti": media
-        })
+        risultato.append(
+            {"cognome": s.get("cognome"), "nome": s.get("nome"), "voti": media}
+        )
 
     return jsonify(risultato), 200
 
@@ -113,13 +175,12 @@ def voti_alti_studenti():
         esami = s.get("esami", [])
         voti_alti = [e.get("voto") for e in esami if e.get("voto", 0) >= 24]
 
-        risultato.append({
-            "nome": s.get("nome"),
-            "cognome": s.get("cognome"),
-            "voti_alti": voti_alti
-        })
+        risultato.append(
+            {"nome": s.get("nome"), "cognome": s.get("cognome"), "voti_alti": voti_alti}
+        )
 
     return jsonify(risultato), 200
+
 
 @studenti_bp.route("/media/<string:studente_id>", methods=["GET"])
 def media_studente(studente_id):
@@ -136,11 +197,10 @@ def media_studente(studente_id):
     voti = [e.get("voto") for e in esami if "voto" in e]
     media = round(sum(voti) / len(voti), 2) if voti else None
 
-    return jsonify({
-        "cognome": s.get("cognome"),
-        "nome": s.get("nome"),
-        "voti": media
-    }), 200
+    return (
+        jsonify({"cognome": s.get("cognome"), "nome": s.get("nome"), "voti": media}),
+        200,
+    )
 
 
 @studenti_bp.route("/voti-alti/<string:studente_id>", methods=["GET"])
@@ -157,8 +217,9 @@ def voti_alti_studente(studente_id):
     esami = s.get("esami", [])
     voti_alti = [e.get("voto") for e in esami if e.get("voto", 0) >= 24]
 
-    return jsonify({
-        "cognome": s.get("cognome"),
-        "nome": s.get("nome"),
-        "voti": voti_alti
-    }), 200
+    return (
+        jsonify(
+            {"cognome": s.get("cognome"), "nome": s.get("nome"), "voti": voti_alti}
+        ),
+        200,
+    )

@@ -10,7 +10,8 @@ Questo documento descrive tutte le route per la gestione degli studenti implemen
 3. [GET /studenti/<id> - Dettaglio studente](#get-dettaglio)
 4. [PUT /studenti/<id> - Aggiorna studente](#put-aggiorna)
 5. [DELETE /studenti/<id> - Elimina studente](#delete-elimina)
-6. [Note tecniche importanti](#note-tecniche)
+6. [POST /studenti/<id>/iscriviti/<codice> - Iscrizione automatica](#iscrizione-automatica)
+7. [Note tecniche importanti](#note-tecniche)
 
 ---
 
@@ -475,7 +476,353 @@ L'eliminazione è **permanente** e non può essere annullata. Non c'è soft dele
 
 ---
 
-## Note tecniche importanti {#note-tecniche}
+## 6. POST /studenti/<id>/iscriviti/<codice> - Iscrizione automatica {#iscrizione-automatica}
+
+### Endpoint
+```
+POST http://127.0.0.1:5000/studenti/674c3a1b2f8d9e0012345678/iscriviti/SO101
+```
+
+### Descrizione
+Iscrive uno studente a un modulo con **aggiornamento bidirezionale automatico**:
+- Aggiunge il codice modulo a `moduliIscritti` dello studente
+- Aggiunge le info studente a `studentiIscritti` del modulo
+- Evita duplicazioni (se già iscritto, non fa nulla)
+
+### Codice
+```python
+@studenti_bp.route("/<string:studente_id>/iscriviti/<string:codice_modulo>", methods=["POST"])
+def iscriviti_modulo(studente_id, codice_modulo):
+    """Iscrivi studente a modulo - aggiornamento bidirezionale"""
+    db = current_app.config["MONGO_DB"]
+    
+    try:
+        oid_studente = ObjectId(studente_id)
+    except:
+        return jsonify({"error": "ID studente non valido"}), 400
+    
+    # 1. Verifica esistenza studente
+    studente = db.studente.find_one({"_id": oid_studente})
+    if not studente:
+        return jsonify({"error": "Studente non trovato"}), 404
+    
+    # 2. Verifica esistenza modulo per codice
+    modulo = db.modulo.find_one({"codice": codice_modulo})
+    if not modulo:
+        return jsonify({"error": "Modulo non trovato"}), 404
+    
+    # 3. Verifica se già iscritto
+    moduli_iscritti = studente.get("moduliIscritti", [])
+    if codice_modulo in moduli_iscritti:
+        return jsonify({"message": "Studente già iscritto a questo modulo"}), 200
+    
+    # 4. Aggiorna studente: aggiungi modulo a moduliIscritti
+    db.studente.update_one(
+        {"_id": oid_studente},
+        {"$addToSet": {"moduliIscritti": codice_modulo}}  # $addToSet evita duplicati
+    )
+    
+    # 5. Aggiorna modulo: aggiungi studente a studentiIscritti
+    db.modulo.update_one(
+        {"codice": codice_modulo},
+        {"$addToSet": {
+            "studentiIscritti": {
+                "studente_id": studente_id,
+                "nome": studente.get("nome", ""),
+                "cognome": studente.get("cognome", "")
+            }
+        }}
+    )
+    
+    return jsonify({
+        "message": "Iscrizione completata con successo",
+        "studente": {
+            "id": studente_id,
+            "nome": studente.get("nome"),
+            "cognome": studente.get("cognome")
+        },
+        "modulo": {
+            "codice": codice_modulo,
+            "nome": modulo.get("nome")
+        }
+    }), 201
+```
+
+### Spiegazione passo-passo
+
+#### 1. Validazione ID studente
+```python
+try:
+    oid_studente = ObjectId(studente_id)
+except:
+    return jsonify({"error": "ID studente non valido"}), 400
+```
+Converte la stringa ID in ObjectId. Se fallisce (formato non valido), restituisce errore 400.
+
+#### 2. Verifica esistenza studente
+```python
+studente = db.studente.find_one({"_id": oid_studente})
+if not studente:
+    return jsonify({"error": "Studente non trovato"}), 404
+```
+Cerca lo studente nel database. Se non esiste, errore 404.
+
+#### 3. Verifica esistenza modulo
+```python
+modulo = db.modulo.find_one({"codice": codice_modulo})
+if not modulo:
+    return jsonify({"error": "Modulo non trovato"}), 404
+```
+Cerca il modulo per **codice** (non per _id). Se non esiste, errore 404.
+
+#### 4. Controllo duplicazione
+```python
+moduli_iscritti = studente.get("moduliIscritti", [])
+if codice_modulo in moduli_iscritti:
+    return jsonify({"message": "Studente già iscritto a questo modulo"}), 200
+```
+Verifica se lo studente è già iscritto. Se sì, restituisce messaggio informativo senza fare nulla.
+
+#### 5. Aggiornamento studente
+```python
+db.studente.update_one(
+    {"_id": oid_studente},
+    {"$addToSet": {"moduliIscritti": codice_modulo}}
+)
+```
+**`$addToSet`** - Operatore MongoDB che aggiunge un elemento a un array **solo se non esiste già** (duplicazione automaticamente evitata).
+
+**Risultato sul documento studente:**
+```javascript
+{
+  _id: ObjectId("674c3a1b..."),
+  nome: "Mario",
+  cognome: "Rossi",
+  moduliIscritti: ["SO101", "DB103"]  // ← Aggiunto SO101
+}
+```
+
+#### 6. Aggiornamento modulo
+```python
+db.modulo.update_one(
+    {"codice": codice_modulo},
+    {"$addToSet": {
+        "studentiIscritti": {
+            "studente_id": studente_id,
+            "nome": studente.get("nome", ""),
+            "cognome": studente.get("cognome", "")
+        }
+    }}
+)
+```
+Aggiunge un **documento embedded** con le info dello studente all'array `studentiIscritti` del modulo.
+
+**Risultato sul documento modulo:**
+```javascript
+{
+  codice: "SO101",
+  nome: "Sistemi Operativi",
+  studentiIscritti: [
+    {
+      studente_id: "674c3a1b...",
+      nome: "Mario",
+      cognome: "Rossi"
+    },
+    // ... altri studenti
+  ]
+}
+```
+
+### Esempio richiesta
+**Method:** `POST`  
+**URL:** `http://127.0.0.1:5000/studenti/674c3a1b2f8d9e0012345678/iscriviti/SO101`  
+**Body:** Nessuno (parametri nell'URL)
+
+### Risposte
+
+#### Successo - Iscrizione completata (201 Created)
+```json
+{
+  "message": "Iscrizione completata con successo",
+  "studente": {
+    "id": "674c3a1b2f8d9e0012345678",
+    "nome": "Mario",
+    "cognome": "Rossi"
+  },
+  "modulo": {
+    "codice": "SO101",
+    "nome": "Sistemi Operativi"
+  }
+}
+```
+
+#### Studente già iscritto (200 OK)
+```json
+{
+  "message": "Studente già iscritto a questo modulo"
+}
+```
+
+#### Errore - Studente non trovato (404)
+```json
+{
+  "error": "Studente non trovato"
+}
+```
+
+#### Errore - Modulo non trovato (404)
+```json
+{
+  "error": "Modulo non trovato"
+}
+```
+
+#### Errore - ID non valido (400)
+```json
+{
+  "error": "ID studente non valido"
+}
+```
+
+### Vantaggi aggiornamento bidirezionale
+
+**Senza aggiornamento bidirezionale:**
+```javascript
+// Studente
+{ moduliIscritti: ["SO101"] }
+
+// Modulo SO101 - NON sa chi è iscritto! ❌
+{ studentiIscritti: [] }
+```
+
+**Con aggiornamento bidirezionale:**
+```javascript
+// Studente
+{ moduliIscritti: ["SO101"] }
+
+// Modulo SO101 - SA chi è iscritto! ✅
+{ 
+  studentiIscritti: [
+    { studente_id: "674c...", nome: "Mario", cognome: "Rossi" }
+  ] 
+}
+```
+
+**Benefici:**
+- ✅ Visualizzazione immediata degli iscritti dal modulo
+- ✅ Query più veloci (nessun JOIN necessario)
+- ✅ Coerenza garantita tra studente e modulo
+- ✅ Nessuna duplicazione grazie a `$addToSet`
+
+### Operatore MongoDB: $addToSet
+
+**`$addToSet`** vs **`$push`**:
+
+```python
+# $push - Aggiunge sempre, anche se esiste (crea duplicati)
+{"$push": {"moduliIscritti": "SO101"}}
+# Risultato: ["SO101", "SO101", "SO101"]  ❌
+
+# $addToSet - Aggiunge solo se non esiste (no duplicati)
+{"$addToSet": {"moduliIscritti": "SO101"}}
+# Risultato: ["SO101"]  ✅
+```
+
+### Testing con Postman
+
+**Sequenza di test:**
+
+1. **GET studente** - Controlla `moduliIscritti` iniziali
+   ```
+   GET /studenti/674c3a1b2f8d9e0012345678
+   ```
+
+2. **POST iscrizione** - Iscrive a SO101
+   ```
+   POST /studenti/674c3a1b2f8d9e0012345678/iscriviti/SO101
+   ```
+
+3. **GET studente** - Verifica che SO101 sia in `moduliIscritti`
+   ```
+   GET /studenti/674c3a1b2f8d9e0012345678
+   ```
+
+4. **GET modulo** - Verifica che lo studente sia in `studentiIscritti`
+   ```
+   GET /moduli/<modulo_id>
+   ```
+
+5. **POST iscrizione ripetuta** - Testa prevenzione duplicati
+   ```
+   POST /studenti/674c3a1b2f8d9e0012345678/iscriviti/SO101
+   → Dovrebbe restituire "già iscritto"
+   ```
+
+6. **POST con modulo inesistente** - Testa gestione errori
+   ```
+   POST /studenti/674c3a1b2f8d9e0012345678/iscriviti/MODULO999
+   → Dovrebbe restituire 404 "Modulo non trovato"
+   ```
+
+### Note implementative
+
+**Perché cerchiamo il modulo per codice e non per _id?**
+```python
+modulo = db.modulo.find_one({"codice": codice_modulo})
+```
+
+- Il **codice** è più user-friendly (es. "SO101" invece di "674c3a1b...")
+- È il riferimento usato in `moduliIscritti` dello studente
+- È univoco (campo `unique=True` nel model MongoEngine)
+
+**Perché salviamo solo id, nome e cognome nel modulo?**
+```python
+"studentiIscritti": {
+    "studente_id": studente_id,
+    "nome": studente.get("nome", ""),
+    "cognome": studente.get("cognome", "")
+}
+```
+
+- **Denormalizzazione controllata**: dati essenziali per visualizzazione rapida
+- Evita JOIN costosi per liste studenti
+- Se servono altri dati (email, esami), si fa query sullo studente usando `studente_id`
+
+### Possibili estensioni
+
+**1. Cancellazione iscrizione**
+```python
+@studenti_bp.route("/<id>/disiscriviti/<codice>", methods=["DELETE"])
+def disiscriviti_modulo(id, codice):
+    # Rimuove da entrambi con $pull
+    db.studente.update_one({"_id": ObjectId(id)}, {"$pull": {"moduliIscritti": codice}})
+    db.modulo.update_one({"codice": codice}, {"$pull": {"studentiIscritti": {"studente_id": id}}})
+```
+
+**2. Controllo posti disponibili**
+```python
+# Verificare che il modulo non sia pieno
+max_studenti = modulo.get("maxStudenti", 30)
+iscritti_count = len(modulo.get("studentiIscritti", []))
+if iscritti_count >= max_studenti:
+    return jsonify({"error": "Modulo pieno"}), 409
+```
+
+**3. Data iscrizione**
+```python
+from datetime import datetime
+
+"studentiIscritti": {
+    "studente_id": studente_id,
+    "nome": studente.get("nome"),
+    "cognome": studente.get("cognome"),
+    "dataIscrizione": datetime.now().isoformat()
+}
+```
+
+---
+
+## 7. Note tecniche importanti {#note-tecniche}
 
 ### 1. Collection name: `studente` vs `studenti`
 
@@ -657,12 +1004,12 @@ Invoke-WebRequest -Uri "http://127.0.0.1:5000/studenti/<ID>" -Method DELETE
 
 ## Prossimi sviluppi
 
-Funzionalità avanzate da implementare (dalla traccia):
+Funzionalità avanzate implementate:
 
-1. **CRUD Moduli** - Routes per gestire i corsi
-2. **Iscrizione automatica** - `POST /studenti/<id>/iscriviti/<codice_modulo>`
-3. **Calcolo media voti** - `GET /studenti/<id>/media`
-4. **Filtro esami eccellenti** - `GET /studenti/<id>/esami-eccellenti` (voto >= 24)
+1. ✅ **CRUD Moduli** - Routes per gestire i corsi
+2. ✅ **Iscrizione automatica** - `POST /studenti/<id>/iscriviti/<codice_modulo>`
+3. ⏳ **Calcolo media voti** - `GET /studenti/<id>/media`
+4. ⏳ **Filtro esami eccellenti** - `GET /studenti/<id>/esami-eccellenti` (voto >= 24)
 
 ---
 
