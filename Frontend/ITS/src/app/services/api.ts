@@ -32,6 +32,11 @@ export class ApiService {
     return this.http.put(`${this.apiUrl}/studenti/${id}`, studente);
   }
 
+  // Iscrivi studente a modulo
+  iscriviStudenteModulo(studenteId: string, codiceModulo: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/studenti/${studenteId}/iscriviti/${codiceModulo}`, {});
+  }
+
   // Metodi per statistiche studenti
   getMediaStudente(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/studenti/media/${id}`);

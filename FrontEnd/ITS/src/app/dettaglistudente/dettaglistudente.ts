@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ApiService } from '../services/api';
 import { MatDialog } from '@angular/material/dialog';
 import { AggiungiEsameDialogComponent } from './aggiungiesame-dialog';
+import { IscriviModuloDialogComponent } from './iscrivi-modulo-dialog';
 import { Studente } from '../elencostudenti/elencostudenti';
 
 // Struttura del modulo dentro un esame
@@ -117,6 +118,29 @@ export class Dettaglistudente implements OnInit {
   modificaCredenziali(): void {
     console.log('Modifica credenziali click');
     // TODO: Implement dialog to modify credentials
+  }
+
+  iscriviModulo(): void {
+    const dialogRef = this.dialog.open(IscriviModuloDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(codiceModulo => {
+      if (codiceModulo && this.studente && this.studente._id) {
+        this.apiService.iscriviStudenteModulo(this.studente._id, codiceModulo).subscribe({
+          next: (response) => {
+            console.log('Iscrizione completata:', response);
+            alert('Studente iscritto con successo al modulo!');
+            // Ricarica i dati dello studente per aggiornare la lista moduli
+            this.loadStudente(this.studente!._id!);
+          },
+          error: (err) => {
+            console.error('Errore iscrizione:', err);
+            alert('Errore durante l\'iscrizione al modulo');
+          }
+        });
+      }
+    });
   }
 
   gestisciEsami(): void {

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Iscrivi a Modulo</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Seleziona Modulo</mat-label>
+    <mat-select [(ngModel)]="codiceModuloSelezionato" name="modulo">
+      <mat-option *ngFor="let modulo of moduli" [value]="modulo.codice">
+        {{ modulo.nome }} ({{ modulo.codice }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <p *ngIf="moduli.length === 0" style="color: #999; font-style: italic;">
+    Nessun modulo disponibile
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="annulla()">Annulla</button>
+  <button mat-button color="primary" (click)="conferma()" [disabled]="!codiceModuloSelezionato">
+    Iscrivi
+  </button>
+</mat-dialog-actions>

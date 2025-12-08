@@ -37,9 +37,16 @@
             <span class="label">Moduli Iscritti</span>
             <span class="value">{{ studente.moduliIscritti.join(', ') }}</span>
           </div>
+          <div class="info-item full-width" *ngIf="!studente.moduliIscritti || studente.moduliIscritti.length === 0">
+            <span class="label">Moduli Iscritti</span>
+            <span class="value" style="color: #999; font-style: italic;">Nessun modulo</span>
+          </div>
         </div>
       </mat-card-content>
       <mat-card-actions align="end">
+        <button mat-button color="accent" (click)="iscriviModulo()">
+          <mat-icon>add_circle</mat-icon> Iscrivi a Modulo
+        </button>
         <button mat-button color="primary" (click)="modificaCredenziali()">
           <mat-icon>edit</mat-icon> Modifica Credenziali
         </button>

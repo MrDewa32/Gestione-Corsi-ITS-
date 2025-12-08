@@ -94,28 +94,23 @@ def iscriviti_modulo(studente_id, codice_modulo):
     except:
         return jsonify({"error": "ID studente non valido"}), 400
 
-    # 1. Verifica esistenza studente
     studente = db.studente.find_one({"_id": oid_studente})
     if not studente:
         return jsonify({"error": "Studente non trovato"}), 404
 
-    # 2. Verifica esistenza modulo per codice
     modulo = db.modulo.find_one({"codice": codice_modulo})
     if not modulo:
         return jsonify({"error": "Modulo non trovato"}), 404
 
-    # 3. Verifica se già iscritto
     moduli_iscritti = studente.get("moduliIscritti", [])
     if codice_modulo in moduli_iscritti:
         return jsonify({"message": "Studente già iscritto a questo modulo"}), 200
 
-    # 4. Aggiorna studente: aggiungi modulo a moduliIscritti
     db.studente.update_one(
         {"_id": oid_studente},
-        {"$addToSet": {"moduliIscritti": codice_modulo}},  # $addToSet evita duplicati
+        {"$addToSet": {"moduliIscritti": codice_modulo}},
     )
 
-    # 5. Aggiorna modulo: aggiungi studente a studentiIscritti
     db.modulo.update_one(
         {"codice": codice_modulo},
         {
