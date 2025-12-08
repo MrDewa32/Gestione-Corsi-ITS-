@@ -49,6 +49,8 @@ export class IscriviModuloDialogComponent implements OnInit {
 
   conferma(): void {
     if (this.codiceModuloSelezionato) {
+      console.log('🔍 Codice modulo selezionato:', this.codiceModuloSelezionato);
+      console.log('📋 Moduli disponibili:', this.moduli);
       this.dialogRef.close(this.codiceModuloSelezionato);
     }
   }

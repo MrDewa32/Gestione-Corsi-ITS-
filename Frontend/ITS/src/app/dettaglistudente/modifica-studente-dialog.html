@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Modifica Credenziali Studente</h2>
+
+<mat-dialog-content>
+  <form>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput [(ngModel)]="studente.nome" name="nome" required placeholder="Nome">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cognome</mat-label>
+      <input matInput [(ngModel)]="studente.cognome" name="cognome" required placeholder="Cognome">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" [(ngModel)]="studente.email" name="email" required placeholder="email@esempio.it">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annulla</button>
+  <button mat-raised-button color="primary" (click)="onSave()" 
+          [disabled]="!studente.nome || !studente.cognome || !studente.email">
+    Salva Modifiche
+  </button>
+</mat-dialog-actions>

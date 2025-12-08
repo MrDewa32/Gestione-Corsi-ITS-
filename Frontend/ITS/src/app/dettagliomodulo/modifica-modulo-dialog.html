@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Modifica Modulo</h2>
+
+<mat-dialog-content>
+  <form>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Codice Modulo</mat-label>
+      <input matInput [(ngModel)]="modulo.codice" name="codice" required placeholder="Es: MOD001">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome Modulo</mat-label>
+      <input matInput [(ngModel)]="modulo.nome" name="nome" required placeholder="Es: Programmazione Web">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ore Totali</mat-label>
+      <input matInput type="number" [(ngModel)]="modulo.ore" name="ore" required min="1" placeholder="Es: 40">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrizione</mat-label>
+      <textarea matInput [(ngModel)]="modulo.descrizione" name="descrizione" rows="4" placeholder="Descrizione del modulo..."></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annulla</button>
+  <button mat-raised-button color="primary" (click)="onSave()" 
+          [disabled]="!modulo.codice || !modulo.nome || modulo.ore <= 0">
+    Salva Modifiche
+  </button>
+</mat-dialog-actions>

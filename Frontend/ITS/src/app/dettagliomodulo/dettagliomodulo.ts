@@ -7,7 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ApiService } from '../services/api';
+import { ModificaModuloDialogComponent } from './modifica-modulo-dialog';
 
 // Interfaccia per studente iscritto (come arriva dal backend)
 export interface StudenteIscritto {
@@ -36,7 +38,8 @@ export interface ModuloCompleto {
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   templateUrl: './dettagliomodulo.html',
   styleUrl: './dettagliomodulo.css',
@@ -49,7 +52,8 @@ export class DettaglioModulo implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -84,8 +88,31 @@ export class DettaglioModulo implements OnInit {
   }
 
   modificaModulo(): void {
-    console.log('Modifica modulo click');
-    // TODO: Implement dialog to modify module
+    if (!this.modulo) return;
+
+    const dialogRef = this.dialog.open(ModificaModuloDialogComponent, {
+      width: '500px',
+      data: this.modulo
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.modulo?._id) {
+        console.log('📝 Modifica modulo:', result);
+        // Rimuovo _id e studentiIscritti dal body della richiesta
+        const { _id, studentiIscritti, ...moduloData } = result;
+        this.apiService.aggiornaModulo(this.modulo._id, moduloData).subscribe({
+          next: (response) => {
+            console.log('✅ Modulo aggiornato:', response);
+            alert('Modulo aggiornato con successo!');
+            this.loadModulo(this.modulo!._id!);
+          },
+          error: (err) => {
+            console.error('❌ Errore aggiornamento modulo:', err);
+            alert('Errore durante l\'aggiornamento del modulo!');
+          }
+        });
+      }
+    });
   }
 
   eliminaModulo(): void {

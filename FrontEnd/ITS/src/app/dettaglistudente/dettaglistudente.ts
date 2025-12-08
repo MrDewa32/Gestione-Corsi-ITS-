@@ -11,6 +11,7 @@ import { ApiService } from '../services/api';
 import { MatDialog } from '@angular/material/dialog';
 import { AggiungiEsameDialogComponent } from './aggiungiesame-dialog';
 import { IscriviModuloDialogComponent } from './iscrivi-modulo-dialog';
+import { ModificaStudenteDialogComponent } from './modifica-studente-dialog';
 import { Studente } from '../elencostudenti/elencostudenti';
 
 // Struttura del modulo dentro un esame
@@ -116,8 +117,36 @@ export class Dettaglistudente implements OnInit {
   }
 
   modificaCredenziali(): void {
-    console.log('Modifica credenziali click');
-    // TODO: Implement dialog to modify credentials
+    if (!this.studente) return;
+
+    const dialogRef = this.dialog.open(ModificaStudenteDialogComponent, {
+      width: '500px',
+      data: {
+        _id: this.studente._id,
+        nome: this.studente.nome,
+        cognome: this.studente.cognome,
+        email: this.studente.email
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.studente?._id) {
+        console.log('📝 Modifica studente:', result);
+        // Rimuovo _id dal body della richiesta
+        const { _id, ...studenteData } = result;
+        this.apiService.aggiornaStudente(this.studente._id, studenteData).subscribe({
+          next: (response) => {
+            console.log('✅ Studente aggiornato:', response);
+            alert('Credenziali aggiornate con successo!');
+            this.loadStudente(this.studente!._id!);
+          },
+          error: (err) => {
+            console.error('❌ Errore aggiornamento studente:', err);
+            alert('Errore durante l\'aggiornamento delle credenziali!');
+          }
+        });
+      }
+    });
   }
 
   iscriviModulo(): void {
