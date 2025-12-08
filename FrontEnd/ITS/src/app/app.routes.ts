@@ -8,6 +8,7 @@ import { Calendari } from './calendari/calendari';
 import { Listaalunni } from './listaalunni/listaalunni';
 import { Aggiungistudente } from './aggiungistudente/aggiungistudente';
 import { Dettaglistudente } from './dettaglistudente/dettaglistudente';
+import { DettaglioModulo } from './dettagliomodulo/dettagliomodulo';
 
 export const routes: Routes = [
     { path: '', component: Homepage, title: 'Home' },
@@ -19,4 +20,5 @@ export const routes: Routes = [
     { path: 'listaalunni', component: Listaalunni, title: 'Lista Studenti' },
     { path: 'aggiungistudente', component: Aggiungistudente, title: 'Aggiungi Studente' },
     { path: 'dettaglistudente/:id', component: Dettaglistudente, title: 'Dettagli Studente' },
+    { path: 'dettagliomodulo/:id', component: DettaglioModulo, title: 'Dettaglio Modulo' },
 ];

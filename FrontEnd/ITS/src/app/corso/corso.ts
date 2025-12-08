@@ -59,6 +59,6 @@ export class Corso implements OnInit {
   }
 
   visualizzaDettaglio(moduloId: string): void {
-    this.router.navigate(['/modulo', moduloId]);
+    this.router.navigate(['/dettagliomodulo', moduloId]);
   }
 }
